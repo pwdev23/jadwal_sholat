@@ -17,7 +17,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final colorScheme = Theme.of(context).colorScheme;
     const horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
     final cities = ref.watch(citiesProvider(cityName: _controller.text));
@@ -25,8 +24,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: scaffoldBackgroundColor,
+          backgroundColor: colorScheme.surface,
           flexibleSpace: SafeArea(
             child: Stack(
               alignment: Alignment.centerRight,
@@ -37,7 +37,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   margin: horizontalPadding,
                   padding: const EdgeInsets.only(left: 16.0, right: 50.0),
                   decoration: BoxDecoration(
-                    color: colorScheme.primaryContainer,
+                    color: colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(24.0),
                   ),
                   child: TextFormField(
@@ -55,7 +55,14 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                         ),
                         contentPadding: EdgeInsets.only(bottom: 4.0)),
                     keyboardType: TextInputType.name,
-                    onChanged: (_) => setState(() {}),
+                    onChanged: (str) {
+                      if (str.length % 3 == 0) {
+                        setState(() {});
+                      }
+                    },
+                    textInputAction: TextInputAction.search,
+                    onFieldSubmitted: (_) => setState(() {}),
+                    style: TextStyle(color: colorScheme.onPrimaryContainer),
                   ),
                 ),
                 Padding(
@@ -128,12 +135,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 return ListTile(
                   onTap: () {},
                   shape: radius,
-                  title: Text(data[index].name),
+                  title: Text(
+                    data[index].name,
+                    style: TextStyle(color: colorScheme.onPrimaryContainer),
+                  ),
                   subtitle: Text(data[index].id),
-                  tileColor: colorScheme.primaryContainer,
+                  tileColor: colorScheme.surfaceVariant,
                 );
               },
-              separatorBuilder: (_, __) => const Divider(height: 0.0),
+              separatorBuilder: (_, __) => Divider(
+                height: 0.0,
+                color: colorScheme.onSurfaceVariant,
+              ),
               itemCount: data.length,
             );
           },
