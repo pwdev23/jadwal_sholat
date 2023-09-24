@@ -1,6 +1,6 @@
 # jadwal_sholat
 
-<img src="images/icon.png" height="120">
+<img src="images/icon_green.png" height="120">
 
 A Flutter project for Jadwal Sholat app.
 

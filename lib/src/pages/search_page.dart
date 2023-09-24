@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/providers.dart';
+import 'home_page.dart' show HomeArgs;
 
 class SearchPage extends ConsumerStatefulWidget {
   static const routeName = '/search';
@@ -17,6 +19,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final nav = Navigator.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     const horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
     final cities = ref.watch(citiesProvider(cityName: _controller.text));
@@ -133,7 +136,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 }
 
                 return ListTile(
-                  onTap: () {},
+                  onTap: () => _setCityId(data[index].id).then((_) =>
+                      nav.pushReplacementNamed('/home',
+                          arguments: HomeArgs('Home', data[index].id))),
                   shape: radius,
                   title: Text(
                     data[index].name,
@@ -159,5 +164,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _setCityId(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('cityId', id);
   }
 }
