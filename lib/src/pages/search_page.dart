@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/providers.dart';
-import 'home_page.dart' show HomeArgs;
+import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
 
 class SearchPage extends ConsumerStatefulWidget {
   static const routeName = '/search';
@@ -137,8 +137,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
                 return ListTile(
                   onTap: () => _setCityId(data[index].id).then((_) =>
-                      nav.pushReplacementNamed('/home',
-                          arguments: HomeArgs('Home', data[index].id))),
+                      nav.pushReplacementNamed('/schedule',
+                          arguments: PrayerScheduleArgs(data[index].id))),
                   shape: radius,
                   title: Text(
                     data[index].name,

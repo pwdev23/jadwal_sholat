@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home_page.dart' show HomeArgs;
+import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
 
 class AuthPage extends StatefulWidget {
   static const routeName = '/';
@@ -21,8 +21,8 @@ class _AuthPageState extends State<AuthPage> {
 
     _checkState(
       onEmpty: (_) => nav.pushReplacementNamed('/search'),
-      onCityId: (id) =>
-          nav.pushReplacementNamed('/home', arguments: HomeArgs('Home', id)),
+      onCityId: (id) => nav.pushReplacementNamed('/schedule',
+          arguments: PrayerScheduleArgs(id)),
     );
   }
 

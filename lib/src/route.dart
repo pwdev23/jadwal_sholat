@@ -6,10 +6,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return MaterialPageRoute(builder: (_) => const AuthPage());
-    case '/home':
-      final args = settings.arguments as HomeArgs;
+    case '/schedule':
+      final args = settings.arguments as PrayerScheduleArgs;
       return MaterialPageRoute(
-          builder: (_) => HomePage(title: args.title, cityId: args.cityId));
+          builder: (_) => PrayerSchedulePage(cityId: args.cityId));
     case '/search':
       return MaterialPageRoute(builder: (_) => const SearchPage());
     default:
