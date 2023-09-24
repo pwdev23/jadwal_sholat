@@ -1,0 +1,7 @@
+{
+    "prayerSchedule": "Prayer Schedule",
+    "@prayerSchedule": {
+        "description": "A text for prayer schedule title"
+    }
+
+}
