@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/prayer_schedule.dart';
-import '../providers/providers.dart' show prayerScheduleProvider;
+import '../providers/providers.dart' show prayerScheduleProvider, cityProvider;
 
 class PrayerSchedulePage extends ConsumerStatefulWidget {
   static const routeName = '/schedule';
@@ -23,16 +23,22 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final city = ref.watch(cityProvider(id: widget.cityId));
     final schedule =
         ref.watch(prayerScheduleProvider(cityId: widget.cityId, date: _now));
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        title: city.when(
+          data: (data) => Text(data.name),
+          error: (_, __) => const Text('Failed to load'),
+          loading: () => const Text('...'),
+        ),
       ),
       body: ListView(
         children: [
-          Text('City ID: ${widget.cityId}'),
+          const SizedBox(height: 8.0),
           schedule.when(
             data: (data) => _PrayerScheduleColumn(prayerSchedule: data),
             error: (_, __) => const Text('Failed to load'),

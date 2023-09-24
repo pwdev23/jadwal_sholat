@@ -299,5 +299,130 @@ class _PrayerScheduleProviderElement
   @override
   DateTime get date => (origin as PrayerScheduleProvider).date;
 }
+
+String _$cityHash() => r'c5a9b6b31a501014795188323b9e8d3efd66b016';
+
+/// See also [city].
+@ProviderFor(city)
+const cityProvider = CityFamily();
+
+/// See also [city].
+class CityFamily extends Family<AsyncValue<City>> {
+  /// See also [city].
+  const CityFamily();
+
+  /// See also [city].
+  CityProvider call({
+    required String id,
+  }) {
+    return CityProvider(
+      id: id,
+    );
+  }
+
+  @override
+  CityProvider getProviderOverride(
+    covariant CityProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'cityProvider';
+}
+
+/// See also [city].
+class CityProvider extends AutoDisposeFutureProvider<City> {
+  /// See also [city].
+  CityProvider({
+    required String id,
+  }) : this._internal(
+          (ref) => city(
+            ref as CityRef,
+            id: id,
+          ),
+          from: cityProvider,
+          name: r'cityProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product') ? null : _$cityHash,
+          dependencies: CityFamily._dependencies,
+          allTransitiveDependencies: CityFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  CityProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<City> Function(CityRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CityProvider._internal(
+        (ref) => create(ref as CityRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<City> createElement() {
+    return _CityProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CityProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin CityRef on AutoDisposeFutureProviderRef<City> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _CityProviderElement extends AutoDisposeFutureProviderElement<City>
+    with CityRef {
+  _CityProviderElement(super.provider);
+
+  @override
+  String get id => (origin as CityProvider).id;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

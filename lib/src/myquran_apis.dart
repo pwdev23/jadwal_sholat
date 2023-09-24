@@ -47,4 +47,18 @@ class MyQuranApis {
 
     return PrayerSchedule.fromJson(d['data']['jadwal']);
   }
+
+  Future<City> getCity({required String id}) async {
+    final path = '/v1/sholat/kota/id/$id';
+
+    final url = Uri.parse('$kBaseUrl$path');
+
+    final res = await http.get(url);
+
+    if (res.statusCode != 200) throw Exception('Failed to load');
+
+    final d = json.decode(res.body);
+
+    return City.fromJson(d['data']);
+  }
 }

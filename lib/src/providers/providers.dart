@@ -20,3 +20,10 @@ Future<PrayerSchedule> prayerSchedule(PrayerScheduleRef ref,
       api.getPrayerSchedulePerDay(cityId: cityId, date: date);
   return prayerSchedule;
 }
+
+@riverpod
+Future<City> city(CityRef ref, {required String id}) async {
+  final api = MyQuranApis();
+  final city = api.getCity(id: id);
+  return city;
+}
