@@ -6,17 +6,15 @@ void main() {
   final api = MyQuranApis();
   final someday = DateTime(2023, 9, 23, 17, 30);
   test('Get schedule test', () async {
-    late String subuh;
+    late String fajr;
 
-    await api.getPrayerSchedulePerDay(
+    final prayerScedule = await api.getPrayerSchedulePerDay(
       cityId: '1609',
       date: someday,
-      onError: (_) {},
-      onSchedule: (d) {
-        subuh = d['subuh'];
-      },
     );
 
-    expect(subuh, '04:06');
+    fajr = prayerScedule.fajr;
+
+    expect(fajr, '04:06');
   });
 }
