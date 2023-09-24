@@ -11,3 +11,12 @@ Future<List<City>> cities(CitiesRef ref, {required String cityName}) async {
   final cities = api.getCities(cityName);
   return cities;
 }
+
+@riverpod
+Future<PrayerSchedule> prayerSchedule(PrayerScheduleRef ref,
+    {required String cityId, required DateTime date}) async {
+  final api = MyQuranApis();
+  final prayerSchedule =
+      api.getPrayerSchedulePerDay(cityId: cityId, date: date);
+  return prayerSchedule;
+}
