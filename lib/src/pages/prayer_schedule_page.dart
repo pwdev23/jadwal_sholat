@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/prayer_schedule.dart';
 import '../providers/providers.dart' show prayerScheduleProvider;
 
 class PrayerSchedulePage extends ConsumerStatefulWidget {
@@ -33,20 +34,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
         children: [
           Text('City ID: ${widget.cityId}'),
           schedule.when(
-            data: (data) {
-              return Column(
-                children: [
-                  Text(data.imsak),
-                  Text(data.fajr),
-                  Text(data.sunrise),
-                  Text(data.dhuha),
-                  Text(data.dhuhr),
-                  Text(data.asr),
-                  Text(data.maghrib),
-                  Text(data.isha),
-                ],
-              );
-            },
+            data: (data) => _PrayerScheduleColumn(prayerSchedule: data),
             error: (_, __) => const Text('Failed to load'),
             loading: () => const LinearProgressIndicator(),
           ),
@@ -60,4 +48,52 @@ class PrayerScheduleArgs {
   const PrayerScheduleArgs(this.cityId);
 
   final String cityId;
+}
+
+class _PrayerScheduleColumn extends StatelessWidget {
+  const _PrayerScheduleColumn({required this.prayerSchedule});
+
+  final PrayerSchedule prayerSchedule;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _buildScheduleContainer(context, prayerSchedule.imsak, 'Imsak'),
+        _buildScheduleContainer(context, prayerSchedule.fajr, 'Fajr'),
+        _buildScheduleContainer(context, prayerSchedule.sunrise, 'Sunrise'),
+        _buildScheduleContainer(context, prayerSchedule.dhuha, 'Dhuha'),
+        _buildScheduleContainer(context, prayerSchedule.dhuhr, 'Dhuhr'),
+        _buildScheduleContainer(context, prayerSchedule.asr, 'Asr'),
+        _buildScheduleContainer(context, prayerSchedule.maghrib, 'Maghrib'),
+        _buildScheduleContainer(context, prayerSchedule.isha, 'Isha'),
+      ],
+    );
+  }
+
+  Widget _buildScheduleContainer(
+      BuildContext context, String time, String name) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textStyle = Theme.of(context)
+        .textTheme
+        .headlineSmall!
+        .copyWith(color: colorScheme.onSecondaryContainer);
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+        color: colorScheme.secondaryContainer,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(name, style: textStyle),
+          Text(time, style: textStyle),
+        ],
+      ),
+    );
+  }
 }
