@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../providers/providers.dart';
+import '../providers/providers.dart' show citiesProvider;
 import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
 
 class SearchPage extends ConsumerStatefulWidget {
