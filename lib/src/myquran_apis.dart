@@ -11,6 +11,10 @@ class MyQuranApis {
   Future<List<City>> getCities(
     String cityName,
   ) async {
+    if (cityName.isEmpty || cityName == '') {
+      return <City>[];
+    }
+
     final path = '/v1/sholat/kota/cari/$cityName';
 
     var url = Uri.parse('$kBaseUrl$path');
