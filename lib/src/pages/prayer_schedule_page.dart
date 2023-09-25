@@ -25,18 +25,29 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final nav = Navigator.of(context);
     final city = ref.watch(cityProvider(id: widget.cityId));
     final schedule =
         ref.watch(prayerScheduleProvider(cityId: widget.cityId, date: _now));
-    final timeTextStyle = Theme.of(context).textTheme.headlineMedium;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final colorScheme = Theme.of(context).colorScheme;
+    final timeTextStyle = Theme.of(context)
+        .textTheme
+        .headlineMedium!
+        .copyWith(color: colorScheme.onPrimaryContainer);
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: colorScheme.surface,
         title: city.when(
-          data: (data) => Text(data.name),
-          error: (_, __) => const Text('Failed to load'),
-          loading: () => const Text('...'),
+          data: (data) => Text(
+            data.name,
+            style: TextStyle(color: onSurface),
+          ),
+          error: (_, __) =>
+              Text('Failed to load', style: TextStyle(color: onSurface)),
+          loading: () => Text('', style: TextStyle(color: onSurface)),
         ),
       ),
       body: ListView(
@@ -50,9 +61,10 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
                 children: [
                   if (_prayerScheduleFetched)
                     _TimeRemaining(
+                      backgroundColor: colorScheme.primaryContainer,
                       now: now,
                       prayerSchedule: _schedule,
-                      textStyle: timeTextStyle!,
+                      textStyle: timeTextStyle,
                     )
                 ],
               );
@@ -73,7 +85,12 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
             error: (_, __) => const Text('Failed to load'),
             loading: () => const LinearProgressIndicator(),
           ),
+          const SizedBox(height: kToolbarHeight),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => nav.pushNamed('/search'),
+        child: const Icon(Icons.search),
       ),
     );
   }
@@ -92,41 +109,71 @@ class _PrayerScheduleColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildScheduleContainer(context, prayerSchedule.imsak, 'Imsak'),
-        _buildScheduleContainer(context, prayerSchedule.fajr, 'Fajr'),
-        _buildScheduleContainer(context, prayerSchedule.sunrise, 'Sunrise'),
-        _buildScheduleContainer(context, prayerSchedule.dhuha, 'Dhuha'),
-        _buildScheduleContainer(context, prayerSchedule.dhuhr, 'Dhuhr'),
-        _buildScheduleContainer(context, prayerSchedule.asr, 'Asr'),
-        _buildScheduleContainer(context, prayerSchedule.maghrib, 'Maghrib'),
-        _buildScheduleContainer(context, prayerSchedule.isha, 'Isha'),
-      ],
-    );
-  }
-
-  Widget _buildScheduleContainer(
-      BuildContext context, String time, String name) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textStyle = Theme.of(context)
-        .textTheme
-        .headlineSmall!
-        .copyWith(color: colorScheme.onSecondaryContainer);
+    final titleLarge = Theme.of(context).textTheme.titleLarge;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.0),
-        color: colorScheme.secondaryContainer,
+        color: colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(16.0),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(name, style: textStyle),
-          Text(time, style: textStyle),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.surfaceVariant,
+            leading: 'Imsak',
+            trailing: prayerSchedule.imsak,
+            textStyle:
+                titleLarge!.copyWith(color: colorScheme.onSurfaceVariant),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.secondaryContainer,
+            leading: 'Fajr',
+            trailing: prayerSchedule.fajr,
+            textStyle:
+                titleLarge.copyWith(color: colorScheme.onSecondaryContainer),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.surfaceVariant,
+            leading: 'Sunrise',
+            trailing: prayerSchedule.sunrise,
+            textStyle: titleLarge.copyWith(color: colorScheme.onSurfaceVariant),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.secondaryContainer,
+            leading: 'Dhuha',
+            trailing: prayerSchedule.dhuha,
+            textStyle:
+                titleLarge.copyWith(color: colorScheme.onSecondaryContainer),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.surfaceVariant,
+            leading: 'Dhuhr',
+            trailing: prayerSchedule.dhuhr,
+            textStyle: titleLarge.copyWith(color: colorScheme.onSurfaceVariant),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.secondaryContainer,
+            leading: 'Asr',
+            trailing: prayerSchedule.asr,
+            textStyle:
+                titleLarge.copyWith(color: colorScheme.onSecondaryContainer),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.surfaceVariant,
+            leading: 'Maghrib',
+            trailing: prayerSchedule.maghrib,
+            textStyle: titleLarge.copyWith(color: colorScheme.onSurfaceVariant),
+          ),
+          _PrayerTimeTile(
+            backgroundColor: colorScheme.secondaryContainer,
+            leading: 'Isha',
+            trailing: prayerSchedule.isha,
+            textStyle:
+                titleLarge.copyWith(color: colorScheme.onSecondaryContainer),
+          ),
         ],
       ),
     );
@@ -134,14 +181,17 @@ class _PrayerScheduleColumn extends StatelessWidget {
 }
 
 class _TimeRemaining extends StatelessWidget {
-  const _TimeRemaining(
-      {required this.now,
-      required this.prayerSchedule,
-      required this.textStyle});
+  const _TimeRemaining({
+    required this.now,
+    required this.prayerSchedule,
+    required this.textStyle,
+    required this.backgroundColor,
+  });
 
   final DateTime now;
   final PrayerSchedule prayerSchedule;
   final TextStyle textStyle;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -170,18 +220,33 @@ class _TimeRemaining extends StatelessWidget {
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.maghrib))) {
       compare = prayTime(context, now, prayerSchedule.maghrib);
       trailing = 'to Maghrib';
-    } else {
+    } else if (now.isBefore(prayTime(context, now, prayerSchedule.isha))) {
       compare = prayTime(context, now, prayerSchedule.isha);
       trailing = 'to Isha';
+    } else {
+      final tomorrow = now.add(const Duration(days: 1));
+      compare = prayTime(context, tomorrow, prayerSchedule.imsak);
+      trailing = 'to Imsak';
     }
 
     final split = '${compare.difference(now)}'.split('.');
     leading = split[0];
 
-    return Text(
-      '$leading $trailing',
-      textAlign: TextAlign.center,
-      style: textStyle,
+    return Container(
+      width: double.infinity,
+      height: kToolbarHeight * 2,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        color: backgroundColor,
+      ),
+      child: Text(
+        '$leading $trailing',
+        textAlign: TextAlign.center,
+        style: textStyle,
+      ),
     );
   }
 
@@ -189,5 +254,34 @@ class _TimeRemaining extends StatelessWidget {
     final split = timeText.split(':');
     return DateTime(
         now.year, now.month, now.day, int.parse(split[0]), int.parse(split[1]));
+  }
+}
+
+class _PrayerTimeTile extends StatelessWidget {
+  const _PrayerTimeTile({
+    required this.backgroundColor,
+    required this.leading,
+    required this.trailing,
+    required this.textStyle,
+  });
+
+  final Color backgroundColor;
+  final String leading;
+  final String trailing;
+  final TextStyle textStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(leading, style: textStyle),
+          Text(trailing, style: textStyle),
+        ],
+      ),
+    );
   }
 }

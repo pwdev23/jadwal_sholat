@@ -29,6 +29,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       child: Scaffold(
         backgroundColor: colorScheme.surface,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: colorScheme.surface,
           flexibleSpace: SafeArea(
             child: Stack(
@@ -41,7 +42,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   padding: const EdgeInsets.only(left: 16.0, right: 50.0),
                   decoration: BoxDecoration(
                     color: colorScheme.surfaceVariant,
-                    borderRadius: BorderRadius.circular(24.0),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: TextFormField(
                     controller: _controller,
@@ -100,20 +101,20 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               itemBuilder: (context, index) {
                 const allRadius = RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(24.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
                 );
 
                 const startRadius = RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24.0),
-                    topRight: Radius.circular(24.0),
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
                   ),
                 );
 
                 const endRadius = RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(24.0),
-                    bottomRight: Radius.circular(24.0),
+                    bottomLeft: Radius.circular(16.0),
+                    bottomRight: Radius.circular(16.0),
                   ),
                 );
 
@@ -137,8 +138,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
                 return ListTile(
                   onTap: () => _setCityId(data[index].id).then((_) =>
-                      nav.pushReplacementNamed('/schedule',
-                          arguments: PrayerScheduleArgs(data[index].id))),
+                      nav.pushNamedAndRemoveUntil(
+                          '/schedule',
+                          arguments: PrayerScheduleArgs(data[index].id),
+                          (route) => false)),
                   shape: radius,
                   title: Text(
                     data[index].name,
