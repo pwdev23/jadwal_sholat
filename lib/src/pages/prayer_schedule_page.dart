@@ -34,6 +34,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final nav = Navigator.of(context);
     final city = ref.watch(cityProvider(id: widget.cityId));
     final schedule =
@@ -49,14 +50,14 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
             data.name,
             style: TextStyle(color: colorScheme.onSurface),
           ),
-          error: (_, __) => Text('Failed to load',
+          error: (_, __) => Text(l10n.failedToLoad,
               style: TextStyle(color: colorScheme.onSurface)),
           loading: () =>
               Text('', style: TextStyle(color: colorScheme.onSurface)),
         ),
         actions: [
           IconButton(
-            tooltip: 'Search city',
+            tooltip: l10n.searchYourCity,
             onPressed: () => nav.pushNamed('/search'),
             icon: const Icon(Icons.search),
           )
@@ -113,7 +114,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
                 onIsha: (v) => setState(() => _isha = v),
               );
             },
-            error: (_, __) => const Text('Failed to load'),
+            error: (_, __) => Text(l10n.failedToLoad),
             loading: () => const LinearProgressIndicator(),
           ),
           const SizedBox(height: kToolbarHeight * 2),
@@ -170,6 +171,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final titleMedium = Theme.of(context)
@@ -182,7 +184,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text('Notifications', style: textTheme.titleMedium),
+          child: Text(l10n.notifications, style: textTheme.titleMedium),
         ),
         const SizedBox(height: 8.0),
         Padding(
@@ -194,7 +196,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Imsak: ${prayerSchedule.imsak}',
+                  '${l10n.imsak} ${prayerSchedule.imsak}',
                   style: titleMedium,
                 ),
                 selected: imsak,
@@ -203,65 +205,65 @@ class _PrayerScheduleColumn extends StatelessWidget {
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Fajr: ${prayerSchedule.fajr}',
+                  '${l10n.fajr} ${prayerSchedule.fajr}',
                   style: titleMedium,
                 ),
                 selected: fajr,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onFajr(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Sunrise: ${prayerSchedule.sunrise}',
+                  '${l10n.sunrise} ${prayerSchedule.sunrise}',
                   style: titleMedium,
                 ),
                 selected: sunrise,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onSunrise(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Dhuha: ${prayerSchedule.dhuha}',
+                  '${l10n.dhuha} ${prayerSchedule.dhuha}',
                   style: titleMedium,
                 ),
                 selected: dhuha,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onDhuha(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Dhuhr: ${prayerSchedule.dhuhr}',
+                  '${l10n.dhuhr} ${prayerSchedule.dhuhr}',
                   style: titleMedium,
                 ),
                 selected: dhuhr,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onDhuhr(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Asr: ${prayerSchedule.asr}',
+                  '${l10n.asr} ${prayerSchedule.asr}',
                   style: titleMedium,
                 ),
                 selected: asr,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onAsr(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Maghrib: ${prayerSchedule.maghrib}',
+                  '${l10n.maghrib} ${prayerSchedule.maghrib}',
                   style: titleMedium,
                 ),
                 selected: maghrib,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onMaghrib(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
                 label: Text(
-                  'Isha: ${prayerSchedule.isha}',
+                  '${l10n.isha} ${prayerSchedule.isha}',
                   style: titleMedium,
                 ),
                 selected: isha,
-                onSelected: (v) => {onImsak(v)},
+                onSelected: (v) => {onIsha(v)},
               ),
             ],
           ),

@@ -2,6 +2,53 @@
     "prayerSchedule": "Prayer Schedule",
     "@prayerSchedule": {
         "description": "A text for prayer schedule title"
+    },
+    "failedToLoad": "Failed to load",
+    "@failedToLoad": {
+        "description": "A text for failed to load title"
+    },
+    "imsak": "Imsak",
+    "@imsak": {
+        "description": "A text for imsak text button"
+    },
+    "fajr": "Fajr",
+    "@fajr": {
+        "description": "A text for fajr text button"
+    },
+    "sunrise": "Sunrise",
+    "@sunrise": {
+        "description": "A text for sunrise text button"
+    },
+    "dhuha": "Dhuha",
+    "@dhuha": {
+        "description": "A text for dhuha text button"
+    },
+    "dhuhr": "Dhuhr",
+    "@dhuhr": {
+        "description": "A text for dhuhr text button"
+    },
+    "asr": "Asr",
+    "@asr": {
+        "description": "A text for asr text button"
+    },
+    "maghrib": "Maghrib",
+    "@maghrib": {
+        "description": "A text for maghrib text button"
+    },
+    "isha": "Isha",
+    "@isha": {
+        "description": "A text for isha text button"
+    },
+    "searchYourCity": "Search your city",
+    "@searchYourCity": {
+        "description": "A text for search city title"
+    },
+    "cityName": "City name",
+    "@cityName": {
+        "description": "A text for city name hint text"
+    },
+    "notifications": "Notifications",
+    "@notifications": {
+        "description": "A text for notifications title"
     }
-
 }

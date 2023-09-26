@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../common.dart';
 import '../providers/providers.dart' show citiesProvider;
 import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
 
@@ -19,6 +19,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
     final nav = Navigator.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     const horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
@@ -47,17 +49,17 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   child: TextFormField(
                     controller: _controller,
                     textAlignVertical: TextAlignVertical.center,
-                    decoration: const InputDecoration(
-                        hintText: 'City name',
+                    decoration: InputDecoration(
+                        hintText: l10n.cityName,
                         border: InputBorder.none,
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         isCollapsed: true,
                         errorMaxLines: 0,
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minWidth: double.infinity,
                           maxHeight: 40.0,
                         ),
-                        contentPadding: EdgeInsets.only(bottom: 4.0)),
+                        contentPadding: const EdgeInsets.only(bottom: 4.0)),
                     keyboardType: TextInputType.name,
                     onChanged: (str) {
                       if (str.length % 3 == 0) {
@@ -92,8 +94,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         body: cities.when(
           data: (data) {
             if (data.isEmpty) {
-              return const Center(
-                child: Text('Search your city'),
+              return Center(
+                child: Text(
+                  l10n.searchYourCity,
+                  style: textTheme.bodyLarge!
+                      .copyWith(color: colorScheme.onSurface),
+                ),
               );
             }
 
@@ -158,8 +164,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               itemCount: data.length,
             );
           },
-          error: (_, __) => const Center(
-            child: Text('Failed to load'),
+          error: (_, __) => Center(
+            child: Text(l10n.failedToLoad),
           ),
           loading: () => const Center(
             child: CircularProgressIndicator(),

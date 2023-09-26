@@ -1,3 +1,15 @@
 {
-    "prayerSchedule": "Jadwal Sholat"
+    "prayerSchedule": "Jadwal Sholat",
+    "failedToLoad": "Gagal untuk memuat",
+    "imsak": "Imsak",
+    "fajr": "Subuh",
+    "sunrise": "Terbit",
+    "dhuha": "Duha",
+    "dhuhr": "Dzuhur",
+    "asr": "Ashar",
+    "maghrib": "Maghrib",
+    "isha": "Isya",
+    "searchYourCity": "Cari kota Anda",
+    "cityName": "Nama kota",
+    "notifications": "Notifikasi"
 }
