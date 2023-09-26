@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/prayer_schedule.dart';
 import '../providers/providers.dart' show prayerScheduleProvider, cityProvider;
 import '../utils.dart';
+import '../common.dart';
 
 class PrayerSchedulePage extends ConsumerStatefulWidget {
   static const routeName = '/schedule';
@@ -23,6 +23,14 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
   final _now = DateTime.now();
   late PrayerSchedule _schedule;
   bool _prayerScheduleFetched = false;
+  bool _imsak = false;
+  bool _fajr = true;
+  bool _sunrise = false;
+  bool _dhuha = false;
+  bool _dhuhr = true;
+  bool _asr = true;
+  bool _maghrib = true;
+  bool _isha = true;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +47,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
         title: city.when(
           data: (data) => Text(
             data.name,
-            style: TextStyle(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: colorScheme.onSurface),
           ),
           error: (_, __) => Text('Failed to load',
               style: TextStyle(color: colorScheme.onSurface)),
@@ -88,7 +93,25 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
                 });
               }
 
-              return _PrayerScheduleColumn(prayerSchedule: data);
+              return _PrayerScheduleColumn(
+                prayerSchedule: data,
+                imsak: _imsak,
+                onImsak: (v) => setState(() => _imsak = v),
+                fajr: _fajr,
+                onFajr: (v) => setState(() => _fajr = v),
+                sunrise: _sunrise,
+                onSunrise: (v) => setState(() => _sunrise = v),
+                dhuha: _dhuha,
+                onDhuha: (v) => setState(() => _dhuha = v),
+                dhuhr: _dhuhr,
+                onDhuhr: (v) => setState(() => _dhuhr = v),
+                asr: _asr,
+                onAsr: (v) => setState(() => _asr = v),
+                maghrib: _maghrib,
+                onMaghrib: (v) => setState(() => _maghrib = v),
+                isha: _isha,
+                onIsha: (v) => setState(() => _isha = v),
+              );
             },
             error: (_, __) => const Text('Failed to load'),
             loading: () => const LinearProgressIndicator(),
@@ -107,68 +130,141 @@ class PrayerScheduleArgs {
 }
 
 class _PrayerScheduleColumn extends StatelessWidget {
-  const _PrayerScheduleColumn({required this.prayerSchedule});
+  const _PrayerScheduleColumn({
+    required this.prayerSchedule,
+    required this.imsak,
+    required this.fajr,
+    required this.sunrise,
+    required this.dhuha,
+    required this.dhuhr,
+    required this.asr,
+    required this.maghrib,
+    required this.isha,
+    required this.onImsak,
+    required this.onFajr,
+    required this.onSunrise,
+    required this.onDhuha,
+    required this.onDhuhr,
+    required this.onAsr,
+    required this.onMaghrib,
+    required this.onIsha,
+  });
 
   final PrayerSchedule prayerSchedule;
+  final bool imsak;
+  final bool fajr;
+  final bool sunrise;
+  final bool dhuha;
+  final bool dhuhr;
+  final bool asr;
+  final bool maghrib;
+  final bool isha;
+  final Function(bool) onImsak;
+  final Function(bool) onFajr;
+  final Function(bool) onSunrise;
+  final Function(bool) onDhuha;
+  final Function(bool) onDhuhr;
+  final Function(bool) onAsr;
+  final Function(bool) onMaghrib;
+  final Function(bool) onIsha;
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    final titleMedium = Theme.of(context).textTheme.titleMedium;
+    final titleMedium = Theme.of(context)
+        .textTheme
+        .titleMedium!
+        .copyWith(color: colorScheme.onSecondaryContainer);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Imsak',
-          trailing: prayerSchedule.imsak,
-          textStyle: titleMedium!.copyWith(color: colorScheme.onSurfaceVariant),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text('Notifications', style: textTheme.titleMedium),
         ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Fajr',
-          trailing: prayerSchedule.fajr,
-          textStyle:
-              titleMedium.copyWith(color: colorScheme.onSecondaryContainer),
-        ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Sunrise',
-          trailing: prayerSchedule.sunrise,
-          textStyle: titleMedium.copyWith(color: colorScheme.onSurfaceVariant),
-        ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Dhuha',
-          trailing: prayerSchedule.dhuha,
-          textStyle:
-              titleMedium.copyWith(color: colorScheme.onSecondaryContainer),
-        ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Dhuhr',
-          trailing: prayerSchedule.dhuhr,
-          textStyle: titleMedium.copyWith(color: colorScheme.onSurfaceVariant),
-        ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Asr',
-          trailing: prayerSchedule.asr,
-          textStyle:
-              titleMedium.copyWith(color: colorScheme.onSecondaryContainer),
-        ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Maghrib',
-          trailing: prayerSchedule.maghrib,
-          textStyle: titleMedium.copyWith(color: colorScheme.onSurfaceVariant),
-        ),
-        _PrayerTimeTile(
-          backgroundColor: colorScheme.surfaceVariant,
-          leading: 'Isha',
-          trailing: prayerSchedule.isha,
-          textStyle:
-              titleMedium.copyWith(color: colorScheme.onSecondaryContainer),
+        const SizedBox(height: 8.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Wrap(
+            runSpacing: 2.0,
+            spacing: 8.0,
+            children: [
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Imsak: ${prayerSchedule.imsak}',
+                  style: titleMedium,
+                ),
+                selected: imsak,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Fajr: ${prayerSchedule.fajr}',
+                  style: titleMedium,
+                ),
+                selected: fajr,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Sunrise: ${prayerSchedule.sunrise}',
+                  style: titleMedium,
+                ),
+                selected: sunrise,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Dhuha: ${prayerSchedule.dhuha}',
+                  style: titleMedium,
+                ),
+                selected: dhuha,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Dhuhr: ${prayerSchedule.dhuhr}',
+                  style: titleMedium,
+                ),
+                selected: dhuhr,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Asr: ${prayerSchedule.asr}',
+                  style: titleMedium,
+                ),
+                selected: asr,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Maghrib: ${prayerSchedule.maghrib}',
+                  style: titleMedium,
+                ),
+                selected: maghrib,
+                onSelected: (v) => {onImsak(v)},
+              ),
+              ChoiceChip.elevated(
+                selectedColor: colorScheme.secondaryContainer,
+                label: Text(
+                  'Isha: ${prayerSchedule.isha}',
+                  style: titleMedium,
+                ),
+                selected: isha,
+                onSelected: (v) => {onImsak(v)},
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -253,39 +349,6 @@ class _TimeRemaining extends StatelessWidget {
             TextSpan(text: trailing, style: tralingStyle),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PrayerTimeTile extends StatelessWidget {
-  const _PrayerTimeTile({
-    required this.backgroundColor,
-    required this.leading,
-    required this.trailing,
-    required this.textStyle,
-  });
-
-  final Color backgroundColor;
-  final String leading;
-  final String trailing;
-  final TextStyle textStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: Row(
-        children: [
-          Text(leading, style: textStyle),
-          const Spacer(),
-          Text(trailing, style: textStyle),
-        ],
       ),
     );
   }
