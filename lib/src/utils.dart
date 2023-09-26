@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 String parseDate(DateTime date) {
   late String finalM;
   late String finalD;
@@ -19,4 +21,10 @@ String parseDate(DateTime date) {
   }
 
   return '/$y/$finalM/$finalD';
+}
+
+DateTime prayTime(BuildContext context, DateTime now, String timeText) {
+  final split = timeText.split(':');
+  return DateTime(
+      now.year, now.month, now.day, int.parse(split[0]), int.parse(split[1]));
 }
