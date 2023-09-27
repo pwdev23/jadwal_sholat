@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +10,9 @@ import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
 class SearchPage extends ConsumerStatefulWidget {
   static const routeName = '/search';
 
-  const SearchPage({super.key});
+  const SearchPage({super.key, required this.data});
+
+  final String data;
 
   @override
   ConsumerState<SearchPage> createState() => _SearchPageState();
@@ -143,11 +147,11 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 }
 
                 return ListTile(
-                  onTap: () => _setCityId(data[index].id).then((_) =>
-                      nav.pushNamedAndRemoveUntil(
-                          '/schedule',
-                          arguments: PrayerScheduleArgs(data[index].id),
-                          (route) => false)),
+                  onTap: () => _setCityId(
+                      data[index].id,
+                      (d) => nav.pushNamedAndRemoveUntil(
+                          '/schedule', (route) => false,
+                          arguments: PrayerScheduleArgs(d))),
                   shape: radius,
                   title: Text(
                     data[index].name,
@@ -175,8 +179,35 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     );
   }
 
-  Future<void> _setCityId(String id) async {
+  Future<void> _setCityId(String cityId, Function(String) onData) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('cityId', id);
+    final data = json.decode(widget.data);
+    final notifications = data['notifications'] as Map<String, dynamic>;
+
+    var newData = {
+      "cityId": cityId,
+      "notifications": {
+        "imsak": notifications['imsak'],
+        "fajr": notifications['fajr'],
+        "sunrise": notifications['sunrise'],
+        "dhuha": notifications['dhuha'],
+        "dhuhr": notifications['dhuhr'],
+        "asr": notifications['asr'],
+        "maghrib": notifications['maghrib'],
+        "isha": notifications['isha'],
+      }
+    };
+
+    final d = json.encode(newData);
+
+    prefs.setString('data', d);
+
+    onData(d);
   }
+}
+
+class SearchArgs {
+  const SearchArgs(this.data);
+
+  final String data;
 }

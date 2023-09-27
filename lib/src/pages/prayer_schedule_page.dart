@@ -1,19 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/prayer_schedule.dart';
-import '../providers/providers.dart' show prayerScheduleProvider, cityProvider;
+import '../providers/providers.dart';
 import '../utils.dart';
 import '../common.dart';
+import 'search_page.dart';
 
 class PrayerSchedulePage extends ConsumerStatefulWidget {
   static const routeName = '/schedule';
 
   const PrayerSchedulePage({
     super.key,
-    required this.cityId,
+    required this.data,
   });
 
-  final String cityId;
+  final String data;
 
   @override
   ConsumerState<PrayerSchedulePage> createState() => _PrayerSchedulePageState();
@@ -22,23 +26,31 @@ class PrayerSchedulePage extends ConsumerStatefulWidget {
 class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
   final _now = DateTime.now();
   late PrayerSchedule _schedule;
+  late String _cityId;
+  late bool _imsak;
+  late bool _fajr;
+  late bool _sunrise;
+  late bool _dhuha;
+  late bool _dhuhr;
+  late bool _asr;
+  late bool _maghrib;
+  late bool _isha;
   bool _prayerScheduleFetched = false;
-  bool _imsak = false;
-  bool _fajr = true;
-  bool _sunrise = false;
-  bool _dhuha = false;
-  bool _dhuhr = true;
-  bool _asr = true;
-  bool _maghrib = true;
-  bool _isha = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getData(widget.data);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final nav = Navigator.of(context);
-    final city = ref.watch(cityProvider(id: widget.cityId));
+    final city = ref.watch(cityProvider(id: _cityId));
     final schedule =
-        ref.watch(prayerScheduleProvider(cityId: widget.cityId, date: _now));
+        ref.watch(prayerScheduleProvider(cityId: _cityId, date: _now));
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -58,7 +70,29 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
         actions: [
           IconButton(
             tooltip: l10n.searchYourCity,
-            onPressed: () => nav.pushNamed('/search'),
+            onPressed: () async {
+              var data = {
+                "cityId": _cityId,
+                "notifications": {
+                  "imsak": _imsak,
+                  "fajr": _fajr,
+                  "sunrise": _sunrise,
+                  "dhuha": _dhuha,
+                  "dhuhr": _dhuhr,
+                  "asr": _asr,
+                  "maghrib": _maghrib,
+                  "isha": _isha,
+                }
+              };
+
+              final d = json.encode(data);
+
+              final prefs = await SharedPreferences.getInstance();
+
+              prefs.setString('data', d);
+
+              nav.pushNamed('/search', arguments: SearchArgs(d));
+            },
             icon: const Icon(Icons.search),
           )
         ],
@@ -122,12 +156,29 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
       ),
     );
   }
+
+  void _getData(String data) {
+    final d = json.decode(data);
+    final n = d['notifications'] as Map<String, dynamic>;
+
+    setState(() {
+      _cityId = d['cityId'];
+      _imsak = n['imsak']!;
+      _fajr = n['fajr']!;
+      _sunrise = n['sunrise']!;
+      _dhuha = n['dhuha']!;
+      _dhuhr = n['dhuhr']!;
+      _asr = n['asr']!;
+      _maghrib = n['maghrib']!;
+      _isha = n['isha']!;
+    });
+  }
 }
 
 class PrayerScheduleArgs {
-  const PrayerScheduleArgs(this.cityId);
+  const PrayerScheduleArgs(this.data);
 
-  final String cityId;
+  final String data;
 }
 
 class _PrayerScheduleColumn extends StatelessWidget {

@@ -9,9 +9,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/schedule':
       final args = settings.arguments as PrayerScheduleArgs;
       return MaterialPageRoute(
-          builder: (_) => PrayerSchedulePage(cityId: args.cityId));
+          builder: (_) => PrayerSchedulePage(data: args.data));
     case '/search':
-      return MaterialPageRoute(builder: (_) => const SearchPage());
+      final args = settings.arguments as SearchArgs;
+      return MaterialPageRoute(builder: (_) => SearchPage(data: args.data));
     default:
       return MaterialPageRoute(
         builder: (_) => Scaffold(
