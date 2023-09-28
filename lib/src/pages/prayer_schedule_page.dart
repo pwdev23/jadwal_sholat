@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/prayer_schedule.dart';
+import '../myquran_apis.dart' show kBaseUrl;
 import '../providers/providers.dart';
 import '../utils.dart';
 import '../common.dart';
@@ -52,6 +55,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
     final schedule =
         ref.watch(prayerScheduleProvider(cityId: _cityId, date: _now));
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -159,6 +163,45 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
             error: (_, __) => Text(l10n.failedToLoad),
             loading: () => const LinearProgressIndicator(),
           ),
+          const SizedBox(height: 16.0),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: colorScheme.tertiaryContainer,
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.info, color: colorScheme.onTertiaryContainer),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      text: l10n.about1,
+                      style: textTheme.bodySmall!
+                          .copyWith(color: colorScheme.onTertiaryContainer),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: ' api.myquran.com',
+                          style:
+                              textTheme.bodySmall!.copyWith(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => _launchUrl(kBaseUrl),
+                        ),
+                        TextSpan(
+                          text: "${l10n.about2}.",
+                          style: textTheme.bodySmall!
+                              .copyWith(color: colorScheme.onTertiaryContainer),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: kToolbarHeight * 2),
         ],
       ),
@@ -203,6 +246,17 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
 
   //   prefs.setString('data', d);
   // }
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri,
+        mode: LaunchMode.platformDefault,
+        webViewConfiguration: const WebViewConfiguration(
+          enableJavaScript: true,
+          enableDomStorage: true,
+        ))) {
+      throw Exception('Failed to launch $url');
+    }
+  }
 }
 
 class PrayerScheduleArgs {
