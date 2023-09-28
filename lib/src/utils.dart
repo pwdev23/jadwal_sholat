@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:timezone/browser.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-
-import 'models/prayer_schedule.dart';
 
 String parseDate(DateTime date) {
   late String finalM;
@@ -42,72 +36,4 @@ void requestPermission() {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()!
       .requestPermission();
-}
-
-Future<void> setScheduleNotifications(
-    {required PrayerSchedule prayerSchedule}) async {
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  await flutterLocalNotificationsPlugin.cancelAll();
-
-  // Initialize time zones only once during app initialization
-  tz.initializeTimeZones();
-
-  // Get the local time zone
-  final String local = await FlutterTimezone.getLocalTimezone();
-
-  // Define Android notification details (channel)
-  const androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    'prayer_channel',
-    'Prayer Schedule',
-    channelDescription: 'Get prayer time reminders',
-  );
-
-  // Define general notification details
-  const platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  // Loop through the prayer times in the schedule and schedule notifications
-  for (final entry in prayerSchedule.toJson().entries) {
-    final prayerName = entry.key;
-    final prayerTime = entry.value;
-
-    late int h;
-    late int m;
-
-    var split = "$prayerTime".split(':');
-
-    h = int.parse(split[0]);
-    m = int.parse(split[1]);
-
-    var now = tz.TZDateTime.now(tz.getLocation(local));
-
-    var tzPrayerTime = TZDateTime(
-      tz.getLocation(local),
-      now.year,
-      now.month,
-      now.day,
-      h,
-      m,
-      0,
-      0,
-      0,
-    );
-
-    // Calculate the notification time
-    final notificationTime = tzPrayerTime;
-
-    // Schedule the notification
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      // Use a unique ID for each prayer time (you can use a hash or index)
-      prayerName.hashCode,
-      "${prayerName[0].toUpperCase()}${prayerName.substring(1)}",
-      prayerTime,
-      notificationTime,
-      platformChannelSpecifics,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
-  }
 }

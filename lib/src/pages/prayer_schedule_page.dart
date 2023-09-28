@@ -42,8 +42,6 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
     super.initState();
 
     _getData(widget.data);
-
-    requestPermission();
   }
 
   @override
@@ -131,58 +129,31 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
               }
 
               return _PrayerScheduleColumn(
+                enableNotifications: false,
                 onNotifications: () {
                   final m = ScaffoldMessenger.of(context);
                   m
                     ..removeCurrentSnackBar()
                     ..showSnackBar(const SnackBar(
-                        content: Text('Re-register a notifications')));
-
-                  if (_prayerScheduleFetched) {
-                    setScheduleNotifications(prayerSchedule: _schedule);
-                  }
+                        content: Text('Install a notifications')));
                 },
                 prayerSchedule: data,
                 imsak: _imsak,
-                onImsak: (v) {
-                  setState(() => _imsak = v);
-                  _setData();
-                },
+                onImsak: (_) {},
                 fajr: _fajr,
-                onFajr: (v) {
-                  setState(() => _fajr = v);
-                  _setData();
-                },
+                onFajr: (_) {},
                 sunrise: _sunrise,
-                onSunrise: (v) {
-                  setState(() => _sunrise = v);
-                  _setData();
-                },
+                onSunrise: (_) {},
                 dhuha: _dhuha,
-                onDhuha: (v) {
-                  setState(() => _dhuha = v);
-                  _setData();
-                },
+                onDhuha: (_) {},
                 dhuhr: _dhuhr,
-                onDhuhr: (v) {
-                  setState(() => _dhuhr = v);
-                  _setData();
-                },
+                onDhuhr: (_) {},
                 asr: _asr,
-                onAsr: (v) {
-                  setState(() => _asr = v);
-                  _setData();
-                },
+                onAsr: (_) {},
                 maghrib: _maghrib,
-                onMaghrib: (v) {
-                  setState(() => _maghrib = v);
-                  _setData();
-                },
+                onMaghrib: (_) {},
                 isha: _isha,
-                onIsha: (v) {
-                  setState(() => _isha = v);
-                  _setData();
-                },
+                onIsha: (_) {},
               );
             },
             error: (_, __) => Text(l10n.failedToLoad),
@@ -211,27 +182,27 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
     });
   }
 
-  Future<void> _setData() async {
-    final prefs = await SharedPreferences.getInstance();
+  // Future<void> _updateData() async {
+  //   final prefs = await SharedPreferences.getInstance();
 
-    var data = {
-      "cityId": _cityId,
-      "notifications": {
-        "imsak": _imsak,
-        "fajr": _fajr,
-        "sunrise": _sunrise,
-        "dhuha": _dhuha,
-        "dhuhr": _dhuhr,
-        "asr": _asr,
-        "maghrib": _maghrib,
-        "isha": _isha,
-      }
-    };
+  //   var data = {
+  //     "cityId": _cityId,
+  //     "notifications": {
+  //       "imsak": _imsak,
+  //       "fajr": _fajr,
+  //       "sunrise": _sunrise,
+  //       "dhuha": _dhuha,
+  //       "dhuhr": _dhuhr,
+  //       "asr": _asr,
+  //       "maghrib": _maghrib,
+  //       "isha": _isha,
+  //     }
+  //   };
 
-    var d = json.encode(data);
+  //   var d = json.encode(data);
 
-    prefs.setString('data', d);
-  }
+  //   prefs.setString('data', d);
+  // }
 }
 
 class PrayerScheduleArgs {
@@ -243,6 +214,7 @@ class PrayerScheduleArgs {
 class _PrayerScheduleColumn extends StatelessWidget {
   const _PrayerScheduleColumn({
     required this.prayerSchedule,
+    required this.enableNotifications,
     required this.imsak,
     required this.fajr,
     required this.sunrise,
@@ -263,6 +235,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
   });
 
   final PrayerSchedule prayerSchedule;
+  final bool enableNotifications;
   final bool imsak;
   final bool fajr;
   final bool sunrise;
@@ -294,14 +267,15 @@ class _PrayerScheduleColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: OutlinedButton.icon(
-            onPressed: onNotifications,
-            icon: Icon(Icons.refresh, color: colorScheme.inverseSurface),
-            label: Text(l10n.notifications, style: textTheme.titleMedium),
+        if (enableNotifications)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: OutlinedButton.icon(
+              onPressed: onNotifications,
+              icon: Icon(Icons.refresh, color: colorScheme.inverseSurface),
+              label: Text(l10n.notifications, style: textTheme.titleMedium),
+            ),
           ),
-        ),
         const SizedBox(height: 8.0),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

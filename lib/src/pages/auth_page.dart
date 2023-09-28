@@ -51,13 +51,13 @@ class _AuthPageState extends State<AuthPage> {
         "cityId": "1301",
         "notifications": {
           "imsak": false,
-          "fajr": true,
+          "fajr": false,
           "sunrise": false,
           "dhuha": false,
-          "dhuhr": true,
-          "asr": true,
-          "maghrib": true,
-          "isha": true,
+          "dhuhr": false,
+          "asr": false,
+          "maghrib": false,
+          "isha": false,
         }
       };
 
