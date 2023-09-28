@@ -42,6 +42,8 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
     super.initState();
 
     _getData(widget.data);
+
+    requestPermission();
   }
 
   @override
@@ -122,6 +124,8 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
           schedule.when(
             data: (data) {
               if (_prayerScheduleFetched == false) {
+                // setScheduleNotifications(prayerSchedule: data);
+
                 setState(() {
                   _schedule = data;
                   _prayerScheduleFetched = true;
@@ -131,21 +135,45 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
               return _PrayerScheduleColumn(
                 prayerSchedule: data,
                 imsak: _imsak,
-                onImsak: (v) => setState(() => _imsak = v),
+                onImsak: (v) {
+                  setState(() => _imsak = v);
+                  _setData();
+                },
                 fajr: _fajr,
-                onFajr: (v) => setState(() => _fajr = v),
+                onFajr: (v) {
+                  setState(() => _fajr = v);
+                  _setData();
+                },
                 sunrise: _sunrise,
-                onSunrise: (v) => setState(() => _sunrise = v),
+                onSunrise: (v) {
+                  setState(() => _sunrise = v);
+                  _setData();
+                },
                 dhuha: _dhuha,
-                onDhuha: (v) => setState(() => _dhuha = v),
+                onDhuha: (v) {
+                  setState(() => _dhuha = v);
+                  _setData();
+                },
                 dhuhr: _dhuhr,
-                onDhuhr: (v) => setState(() => _dhuhr = v),
+                onDhuhr: (v) {
+                  setState(() => _dhuhr = v);
+                  _setData();
+                },
                 asr: _asr,
-                onAsr: (v) => setState(() => _asr = v),
+                onAsr: (v) {
+                  setState(() => _asr = v);
+                  _setData();
+                },
                 maghrib: _maghrib,
-                onMaghrib: (v) => setState(() => _maghrib = v),
+                onMaghrib: (v) {
+                  setState(() => _maghrib = v);
+                  _setData();
+                },
                 isha: _isha,
-                onIsha: (v) => setState(() => _isha = v),
+                onIsha: (v) {
+                  setState(() => _isha = v);
+                  _setData();
+                },
               );
             },
             error: (_, __) => Text(l10n.failedToLoad),
@@ -172,6 +200,28 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
       _maghrib = n['maghrib']!;
       _isha = n['isha']!;
     });
+  }
+
+  Future<void> _setData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    var data = {
+      "cityId": _cityId,
+      "notifications": {
+        "imsak": _imsak,
+        "fajr": _fajr,
+        "sunrise": _sunrise,
+        "dhuha": _dhuha,
+        "dhuhr": _dhuhr,
+        "asr": _asr,
+        "maghrib": _maghrib,
+        "isha": _isha,
+      }
+    };
+
+    var d = json.encode(data);
+
+    prefs.setString('data', d);
   }
 }
 
