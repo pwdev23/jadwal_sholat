@@ -7,7 +7,7 @@ import '../models/prayer_schedule.dart';
 import '../providers/providers.dart';
 import '../utils.dart';
 import '../common.dart';
-import 'search_page.dart';
+import 'search_page.dart' show SearchArgs;
 
 class PrayerSchedulePage extends ConsumerStatefulWidget {
   static const routeName = '/schedule';
@@ -124,8 +124,6 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
           schedule.when(
             data: (data) {
               if (_prayerScheduleFetched == false) {
-                // setScheduleNotifications(prayerSchedule: data);
-
                 setState(() {
                   _schedule = data;
                   _prayerScheduleFetched = true;
@@ -133,6 +131,17 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
               }
 
               return _PrayerScheduleColumn(
+                onNotifications: () {
+                  final m = ScaffoldMessenger.of(context);
+                  m
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(const SnackBar(
+                        content: Text('Re-register a notifications')));
+
+                  if (_prayerScheduleFetched) {
+                    setScheduleNotifications(prayerSchedule: _schedule);
+                  }
+                },
                 prayerSchedule: data,
                 imsak: _imsak,
                 onImsak: (v) {
@@ -250,6 +259,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
     required this.onAsr,
     required this.onMaghrib,
     required this.onIsha,
+    required this.onNotifications,
   });
 
   final PrayerSchedule prayerSchedule;
@@ -269,6 +279,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
   final Function(bool) onAsr;
   final Function(bool) onMaghrib;
   final Function(bool) onIsha;
+  final VoidCallback onNotifications;
 
   @override
   Widget build(BuildContext context) {
@@ -285,7 +296,11 @@ class _PrayerScheduleColumn extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(l10n.notifications, style: textTheme.titleMedium),
+          child: OutlinedButton.icon(
+            onPressed: onNotifications,
+            icon: Icon(Icons.refresh, color: colorScheme.inverseSurface),
+            label: Text(l10n.notifications, style: textTheme.titleMedium),
+          ),
         ),
         const SizedBox(height: 8.0),
         Padding(

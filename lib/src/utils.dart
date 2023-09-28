@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/browser.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -71,15 +72,36 @@ Future<void> setScheduleNotifications(
     final prayerName = entry.key;
     final prayerTime = entry.value;
 
+    late int h;
+    late int m;
+
+    var split = "$prayerTime".split(':');
+
+    h = int.parse(split[0]);
+    m = int.parse(split[1]);
+
+    var now = tz.TZDateTime.now(tz.getLocation(local));
+
+    var tzPrayerTime = TZDateTime(
+      tz.getLocation(local),
+      now.year,
+      now.month,
+      now.day,
+      h,
+      m,
+      0,
+      0,
+      0,
+    );
+
     // Calculate the notification time
-    final notificationTime = tz.TZDateTime.now(tz.getLocation(local))
-        .add(const Duration(seconds: 5));
+    final notificationTime = tzPrayerTime;
 
     // Schedule the notification
     await flutterLocalNotificationsPlugin.zonedSchedule(
       // Use a unique ID for each prayer time (you can use a hash or index)
       prayerName.hashCode,
-      prayerName,
+      "${prayerName[0].toUpperCase()}${prayerName.substring(1)}",
       prayerTime,
       notificationTime,
       platformChannelSpecifics,
