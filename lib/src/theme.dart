@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const seedColor = Color(0xff01d255);
+const seedColor = Color(0xff01122e);
 
 final theme = ThemeData.light(useMaterial3: true).copyWith(
   colorScheme: ColorScheme.fromSeed(
