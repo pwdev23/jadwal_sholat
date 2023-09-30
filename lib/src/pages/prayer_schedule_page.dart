@@ -377,9 +377,9 @@ class _PrayerScheduleColumn extends StatelessWidget {
                         .copyWith(color: colorScheme.onTertiaryContainer),
                     children: <TextSpan>[
                       TextSpan(
-                        text: ' api.myquran.com',
-                        style:
-                            textTheme.bodySmall!.copyWith(color: Colors.blue),
+                        text: ' api.myquran.com, ',
+                        style: textTheme.bodySmall!
+                            .copyWith(color: colorScheme.surfaceTint),
                         recognizer: TapGestureRecognizer()..onTap = onUrl,
                       ),
                       TextSpan(
@@ -498,14 +498,15 @@ class _ShimmerProgressIndicator extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).disabledColor,
+      baseColor: Theme.of(context).splashColor,
       highlightColor: colorScheme.surface,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            color: Theme.of(context).disabledColor),
+          borderRadius: BorderRadius.circular(radius),
+          color: Theme.of(context).splashColor,
+        ),
       ),
     );
   }
@@ -525,16 +526,23 @@ class _LoadingPrayerSchedule extends StatelessWidget {
             height: kToolbarHeight * 2,
           ),
           const SizedBox(height: 16.0),
-          Wrap(
-            runSpacing: 8.0,
-            spacing: 8.0,
-            children: kScheduleShimmer
-                .map((e) => _ShimmerProgressIndicator(
-                      width: e['width']!,
-                      height: e['height']!,
-                      radius: e['radius']!,
-                    ))
-                .toList(),
+          Shimmer.fromColors(
+            baseColor: Theme.of(context).splashColor,
+            highlightColor: Theme.of(context).colorScheme.surface,
+            child: Wrap(
+              runSpacing: 8.0,
+              spacing: 8.0,
+              children: kScheduleShimmer
+                  .map((e) => Container(
+                        width: e['width'],
+                        height: e['height'],
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).splashColor,
+                          borderRadius: BorderRadius.circular(e['radius']!),
+                        ),
+                      ))
+                  .toList(),
+            ),
           ),
           const SizedBox(height: 16.0),
           const _ShimmerProgressIndicator(
