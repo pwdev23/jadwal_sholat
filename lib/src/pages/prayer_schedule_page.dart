@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../models/prayer_schedule.dart';
 import '../myquran_apis.dart' show kBaseUrl;
@@ -67,8 +68,11 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
           ),
           error: (_, __) => Text(l10n.failedToLoad,
               style: TextStyle(color: colorScheme.onSurface)),
-          loading: () =>
-              Text('', style: TextStyle(color: colorScheme.onSurface)),
+          loading: () => const _ShimmerProgressIndicator(
+            width: 140,
+            height: 45.0,
+            radius: 8.0,
+          ),
         ),
       ),
       body: ListView(
@@ -132,7 +136,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
               );
             },
             error: (_, __) => Text(l10n.failedToLoad),
-            loading: () => const LinearProgressIndicator(),
+            loading: () => const _LoadingPrayerSchedule(),
           ),
           const SizedBox(height: kToolbarHeight * 2),
         ],
@@ -477,3 +481,110 @@ class _TimeRemaining extends StatelessWidget {
     );
   }
 }
+
+class _ShimmerProgressIndicator extends StatelessWidget {
+  const _ShimmerProgressIndicator({
+    this.width = double.infinity,
+    this.height = kToolbarHeight,
+    this.radius = 16.0,
+  });
+
+  final double width;
+  final double height;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).disabledColor,
+      highlightColor: colorScheme.surface,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            color: Theme.of(context).disabledColor),
+      ),
+    );
+  }
+}
+
+class _LoadingPrayerSchedule extends StatelessWidget {
+  const _LoadingPrayerSchedule();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _ShimmerProgressIndicator(
+            height: kToolbarHeight * 2,
+          ),
+          const SizedBox(height: 16.0),
+          Wrap(
+            runSpacing: 8.0,
+            spacing: 8.0,
+            children: kScheduleShimmer
+                .map((e) => _ShimmerProgressIndicator(
+                      width: e['width']!,
+                      height: e['height']!,
+                      radius: e['radius']!,
+                    ))
+                .toList(),
+          ),
+          const SizedBox(height: 16.0),
+          const _ShimmerProgressIndicator(
+            height: kToolbarHeight * 2,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+const kScheduleShimmer = [
+  {
+    "width": 130.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 140.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 140.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 150.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 130.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 140.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 140.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+  {
+    "width": 130.0,
+    "height": 45.0,
+    "radius": 8.0,
+  },
+];
