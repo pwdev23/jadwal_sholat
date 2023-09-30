@@ -101,8 +101,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               return Center(
                 child: Text(
                   l10n.searchYourCity,
-                  style: textTheme.bodyLarge!
-                      .copyWith(color: colorScheme.onSurface),
+                  style: textTheme.titleLarge!.copyWith(
+                      color: colorScheme.onSurfaceVariant.withOpacity(0.5)),
                 ),
               );
             }
@@ -163,7 +163,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               },
               separatorBuilder: (_, __) => Divider(
                 height: 0.0,
-                color: colorScheme.onSurfaceVariant,
+                color: colorScheme.surface,
               ),
               itemCount: data.length,
             );

@@ -55,7 +55,6 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
     final schedule =
         ref.watch(prayerScheduleProvider(cityId: _cityId, date: _now));
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -71,35 +70,6 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
           loading: () =>
               Text('', style: TextStyle(color: colorScheme.onSurface)),
         ),
-        actions: [
-          IconButton(
-            tooltip: l10n.searchYourCity,
-            onPressed: () async {
-              var data = {
-                "cityId": _cityId,
-                "notifications": {
-                  "imsak": _imsak,
-                  "fajr": _fajr,
-                  "sunrise": _sunrise,
-                  "dhuha": _dhuha,
-                  "dhuhr": _dhuhr,
-                  "asr": _asr,
-                  "maghrib": _maghrib,
-                  "isha": _isha,
-                }
-              };
-
-              final d = json.encode(data);
-
-              final prefs = await SharedPreferences.getInstance();
-
-              prefs.setString('data', d);
-
-              nav.pushNamed('/search', arguments: SearchArgs(d));
-            },
-            icon: const Icon(Icons.search),
-          )
-        ],
       ),
       body: ListView(
         children: [
@@ -141,6 +111,7 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
                     ..showSnackBar(const SnackBar(
                         content: Text('Install a notifications')));
                 },
+                onUrl: () => _launchUrl(kBaseUrl),
                 prayerSchedule: data,
                 imsak: _imsak,
                 onImsak: (_) {},
@@ -163,47 +134,35 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
             error: (_, __) => Text(l10n.failedToLoad),
             loading: () => const LinearProgressIndicator(),
           ),
-          const SizedBox(height: 16.0),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: colorScheme.tertiaryContainer,
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.info, color: colorScheme.onTertiaryContainer),
-                const SizedBox(width: 16.0),
-                Expanded(
-                  child: Text.rich(
-                    TextSpan(
-                      text: l10n.about1,
-                      style: textTheme.bodySmall!
-                          .copyWith(color: colorScheme.onTertiaryContainer),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: ' api.myquran.com',
-                          style:
-                              textTheme.bodySmall!.copyWith(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => _launchUrl(kBaseUrl),
-                        ),
-                        TextSpan(
-                          text: "${l10n.about2}.",
-                          style: textTheme.bodySmall!
-                              .copyWith(color: colorScheme.onTertiaryContainer),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: kToolbarHeight * 2),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: l10n.searchYourCity,
+        onPressed: () async {
+          var data = {
+            "cityId": _cityId,
+            "notifications": {
+              "imsak": _imsak,
+              "fajr": _fajr,
+              "sunrise": _sunrise,
+              "dhuha": _dhuha,
+              "dhuhr": _dhuhr,
+              "asr": _asr,
+              "maghrib": _maghrib,
+              "isha": _isha,
+            }
+          };
+
+          final d = json.encode(data);
+
+          final prefs = await SharedPreferences.getInstance();
+
+          prefs.setString('data', d);
+
+          nav.pushNamed('/search', arguments: SearchArgs(d));
+        },
+        child: const Icon(Icons.search),
       ),
     );
   }
@@ -225,27 +184,6 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
     });
   }
 
-  // Future<void> _updateData() async {
-  //   final prefs = await SharedPreferences.getInstance();
-
-  //   var data = {
-  //     "cityId": _cityId,
-  //     "notifications": {
-  //       "imsak": _imsak,
-  //       "fajr": _fajr,
-  //       "sunrise": _sunrise,
-  //       "dhuha": _dhuha,
-  //       "dhuhr": _dhuhr,
-  //       "asr": _asr,
-  //       "maghrib": _maghrib,
-  //       "isha": _isha,
-  //     }
-  //   };
-
-  //   var d = json.encode(data);
-
-  //   prefs.setString('data', d);
-  // }
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri,
@@ -286,6 +224,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
     required this.onMaghrib,
     required this.onIsha,
     required this.onNotifications,
+    required this.onUrl,
   });
 
   final PrayerSchedule prayerSchedule;
@@ -307,6 +246,7 @@ class _PrayerScheduleColumn extends StatelessWidget {
   final Function(bool) onMaghrib;
   final Function(bool) onIsha;
   final VoidCallback onNotifications;
+  final VoidCallback onUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -408,6 +348,44 @@ class _PrayerScheduleColumn extends StatelessWidget {
                 ),
                 selected: isha,
                 onSelected: (v) => {onIsha(v)},
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: colorScheme.tertiaryContainer,
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.info, color: colorScheme.onTertiaryContainer),
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    text: l10n.about1,
+                    style: textTheme.bodySmall!
+                        .copyWith(color: colorScheme.onTertiaryContainer),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: ' api.myquran.com',
+                        style:
+                            textTheme.bodySmall!.copyWith(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()..onTap = onUrl,
+                      ),
+                      TextSpan(
+                        text: "${l10n.about2}.",
+                        style: textTheme.bodySmall!
+                            .copyWith(color: colorScheme.onTertiaryContainer),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

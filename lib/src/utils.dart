@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 String parseDate(DateTime date) {
   late String finalM;
@@ -28,12 +27,4 @@ DateTime prayTime(BuildContext context, DateTime now, String timeText) {
   final split = timeText.split(':');
   return DateTime(
       now.year, now.month, now.day, int.parse(split[0]), int.parse(split[1]));
-}
-
-void requestPermission() {
-  var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()!
-      .requestPermission();
 }
