@@ -3,7 +3,7 @@
 <img src="images/icon_green.png" height="120">
 
 A Flutter project for Jadwal Sholat app.
-``
+
 ## About
 
 Introducing the Simple Prayer Schedule App, designed exclusively for Indonesian cities. With this app, you can easily access prayer schedules for your region, all without the inconvenience of ads. Plus, enjoy the convenience of a home widget for quick access to prayer times.
