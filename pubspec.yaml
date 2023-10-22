@@ -1,5 +1,5 @@
 name: jadwal_sholat
-description: A Flutter project for Jadwal Sholat app.
+description: The most minimalist Islamic Prayer Times app for Indonesia region.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

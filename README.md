@@ -2,7 +2,7 @@
 
 <img src="images/icon_green.png" height="120">
 
-A Flutter project for Jadwal Sholat app.
+The most minimalist Islamic Prayer Times app for Indonesia region.
 
 ## About
 
