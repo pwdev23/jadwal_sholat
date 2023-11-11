@@ -1,6 +1,6 @@
 # jadwal_sholat
 
-<img src="images/icon_green.png" height="120">
+<img src="images/icon.png" height="120">
 
 The most minimalist Islamic Prayer Times app for Indonesia region.
 

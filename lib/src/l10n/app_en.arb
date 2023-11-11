@@ -58,5 +58,9 @@
     "about2": "with data regularly updated by the Ministry of Religious Affairs of the Republic of Indonesia (Kemenag)",
     "@about2": {
         "description": "A text for about part 2"
+    },
+    "to": "to",
+    "@to": {
+        "description": "A text for about part 2"
     }
 }
