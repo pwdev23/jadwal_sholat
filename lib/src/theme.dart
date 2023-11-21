@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 const seedColor = Color(0xff01122e);
 
-final theme = ThemeData.light(useMaterial3: true).copyWith(
+final theme = ThemeData.light().copyWith(
   colorScheme: ColorScheme.fromSeed(
     seedColor: seedColor,
     brightness: Brightness.light,
   ),
 );
 
-final darkTheme = ThemeData.dark(useMaterial3: true).copyWith(
+final darkTheme = ThemeData.dark().copyWith(
   colorScheme: ColorScheme.fromSeed(
     seedColor: seedColor,
     brightness: Brightness.dark,

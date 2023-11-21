@@ -414,6 +414,7 @@ class _TimeRemaining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     final leadingStyle = Theme.of(context)
         .textTheme
         .headlineLarge!
@@ -428,32 +429,32 @@ class _TimeRemaining extends StatelessWidget {
 
     if (now.isBefore(prayTime(context, now, prayerSchedule.imsak))) {
       compare = prayTime(context, now, prayerSchedule.imsak);
-      trailing = 'to Imsak';
+      trailing = '${t.to} ${t.imsak}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.fajr))) {
       compare = prayTime(context, now, prayerSchedule.fajr);
-      trailing = 'to Fajr';
+      trailing = '${t.to} ${t.fajr}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.sunrise))) {
       compare = prayTime(context, now, prayerSchedule.sunrise);
-      trailing = 'to Sunrise';
+      trailing = '${t.to} ${t.sunrise}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.dhuha))) {
       compare = prayTime(context, now, prayerSchedule.dhuha);
-      trailing = 'to Dhuha';
+      trailing = '${t.to} ${t.dhuha}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.dhuhr))) {
       compare = prayTime(context, now, prayerSchedule.dhuhr);
-      trailing = 'to Dhuhr';
+      trailing = '${t.to} ${t.dhuhr}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.asr))) {
       compare = prayTime(context, now, prayerSchedule.asr);
-      trailing = 'to Asr';
+      trailing = '${t.to} ${t.asr}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.maghrib))) {
       compare = prayTime(context, now, prayerSchedule.maghrib);
-      trailing = 'to Maghrib';
+      trailing = '${t.to} ${t.maghrib}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.isha))) {
       compare = prayTime(context, now, prayerSchedule.isha);
-      trailing = 'to Isha';
+      trailing = '${t.to} ${t.isha}';
     } else {
       final tomorrow = now.add(const Duration(days: 1));
       compare = prayTime(context, tomorrow, prayerSchedule.imsak);
-      trailing = 'to Imsak';
+      trailing = '${t.to} ${t.imsak}';
     }
 
     final split = '${compare.difference(now)}'.split('.');

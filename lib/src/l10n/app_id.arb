@@ -13,5 +13,6 @@
     "cityName": "Nama kota",
     "notifications": "Notifikasi",
     "about1": "Waktu-waktu shalat yang disediakan di sini berasal dari API open source yang disediakan oleh",
-    "about2": "dengan data yang secara berkala diperbarui oleh Kementerian Agama Republik Indonesia (Kemenag)"
+    "about2": "dengan data yang secara berkala diperbarui oleh Kementerian Agama Republik Indonesia (Kemenag)",
+    "to": "menuju"
 }
