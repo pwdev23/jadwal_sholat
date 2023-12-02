@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:home_widget/home_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,13 @@ import '../utils.dart';
 import '../common.dart';
 import 'search_page.dart' show SearchArgs;
 
+// iOS config
+// const String appGroupId = '<YOUR APP GROUP>';
+// const String iOSWidgetName = 'NewsWidgets';
+
+// Android config
+const String androidWidgetName = 'TimeWidget';
+
 class PrayerSchedulePage extends ConsumerStatefulWidget {
   static const routeName = '/schedule';
 
@@ -25,6 +33,15 @@ class PrayerSchedulePage extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<PrayerSchedulePage> createState() => _PrayerSchedulePageState();
+}
+
+void _updateTimeText({required String title, required String subtitle}) {
+  HomeWidget.saveWidgetData<String>('title', title);
+  HomeWidget.saveWidgetData<String>('subtitle', subtitle);
+  HomeWidget.updateWidget(
+    // iOSName: iOSWidgetName,
+    androidName: androidWidgetName,
+  );
 }
 
 class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
