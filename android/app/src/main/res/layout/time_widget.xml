@@ -18,7 +18,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Time"
+        android:background="@android:color/transparent"
+        android:text="Title"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -28,13 +29,13 @@
         style="@style/Widget.Android.AppWidget.InnerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_below="@+id/title"
+        android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@android:color/white"
-        android:text="Title"
+        android:background="@android:color/transparent"
+        android:text="Subtitle"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 </RelativeLayout>
