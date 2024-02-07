@@ -7,10 +7,11 @@ import 'models/city.dart';
 import 'utils.dart';
 
 const kBaseUrl = 'https://api.myquran.com';
+const kVersion = 'v2';
 
 class MyQuranApis {
   Future<List<City>> getAllCities() async {
-    const path = '/v1/sholat/kota/semua';
+    const path = '/$kVersion/sholat/kota/semua';
 
     final url = Uri.parse('$kBaseUrl$path');
 
@@ -30,7 +31,7 @@ class MyQuranApis {
       return <City>[];
     }
 
-    final path = '/v1/sholat/kota/cari/$cityName';
+    final path = '/$kVersion/sholat/kota/cari/$cityName';
 
     var url = Uri.parse('$kBaseUrl$path');
 
@@ -49,7 +50,7 @@ class MyQuranApis {
     required String cityId,
     required DateTime date,
   }) async {
-    final path = '/v1/sholat/jadwal/$cityId${parseDate(date)}';
+    final path = '/$kVersion/sholat/jadwal/$cityId${parseDate(date)}';
 
     final url = Uri.parse('$kBaseUrl$path');
 
@@ -63,7 +64,7 @@ class MyQuranApis {
   }
 
   Future<City> getCity({required String id}) async {
-    final path = '/v1/sholat/kota/id/$id';
+    final path = '/$kVersion/sholat/kota/$id';
 
     final url = Uri.parse('$kBaseUrl$path');
 
