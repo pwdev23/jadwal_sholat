@@ -6,8 +6,8 @@ part of 'prayer_schedule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_PrayerSchedule _$$_PrayerScheduleFromJson(Map<String, dynamic> json) =>
-    _$_PrayerSchedule(
+_$PrayerScheduleImpl _$$PrayerScheduleImplFromJson(Map<String, dynamic> json) =>
+    _$PrayerScheduleImpl(
       imsak: json['imsak'] as String,
       fajr: json['subuh'] as String,
       sunrise: json['terbit'] as String,
@@ -18,7 +18,8 @@ _$_PrayerSchedule _$$_PrayerScheduleFromJson(Map<String, dynamic> json) =>
       isha: json['isya'] as String,
     );
 
-Map<String, dynamic> _$$_PrayerScheduleToJson(_$_PrayerSchedule instance) =>
+Map<String, dynamic> _$$PrayerScheduleImplToJson(
+        _$PrayerScheduleImpl instance) =>
     <String, dynamic>{
       'imsak': instance.imsak,
       'subuh': instance.fajr,

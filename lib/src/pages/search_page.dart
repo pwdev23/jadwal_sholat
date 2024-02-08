@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common.dart';
 import '../providers/providers.dart' show citiesProvider;
-import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
+import 'mq_page.dart' show MQArgs;
 
 class SearchPage extends ConsumerStatefulWidget {
   static const routeName = '/search';
@@ -150,8 +150,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   onTap: () => _setCityId(
                       data[index].id,
                       (d) => nav.pushNamedAndRemoveUntil(
-                          '/schedule', (route) => false,
-                          arguments: PrayerScheduleArgs(d))),
+                          '/mq', (route) => false,
+                          arguments: MQArgs(d))),
                   shape: radius,
                   title: Text(
                     data[index].name,

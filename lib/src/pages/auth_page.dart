@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'prayer_schedule_page.dart' show PrayerScheduleArgs;
+import 'mq_page.dart' show MQArgs;
 import 'search_page.dart' show SearchArgs;
 
 class AuthPage extends StatefulWidget {
@@ -25,8 +25,8 @@ class _AuthPageState extends State<AuthPage> {
     _checkState(
       onEmpty: (d) =>
           nav.pushReplacementNamed('/search', arguments: SearchArgs(d)),
-      onData: (d) => nav.pushReplacementNamed('/schedule',
-          arguments: PrayerScheduleArgs(d)),
+      onData: (d) => nav.pushReplacementNamed('/mq',
+          arguments: MQArgs(d)),
     );
   }
 

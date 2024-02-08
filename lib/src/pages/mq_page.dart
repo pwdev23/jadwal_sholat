@@ -10,8 +10,10 @@ import 'package:shimmer/shimmer.dart';
 import '../models/prayer_schedule.dart';
 import '../myquran_apis.dart' show kBaseUrl;
 import '../providers/providers.dart';
+import '../shared/shimmer_progress_indicator.dart';
 import '../utils.dart';
 import '../common.dart';
+import 'aladhan_page.dart' show AlAdhanArgs;
 import 'search_page.dart' show SearchArgs;
 
 // iOS config
@@ -21,10 +23,10 @@ import 'search_page.dart' show SearchArgs;
 // Android config
 const String androidWidgetName = 'TimeWidget';
 
-class PrayerSchedulePage extends ConsumerStatefulWidget {
-  static const routeName = '/schedule';
+class MQPage extends ConsumerStatefulWidget {
+  static const routeName = '/mq';
 
-  const PrayerSchedulePage({
+  const MQPage({
     super.key,
     required this.data,
   });
@@ -32,7 +34,7 @@ class PrayerSchedulePage extends ConsumerStatefulWidget {
   final String data;
 
   @override
-  ConsumerState<PrayerSchedulePage> createState() => _PrayerSchedulePageState();
+  ConsumerState<MQPage> createState() => _PrayerSchedulePageState();
 }
 
 void _updateTimeText({required String title, required String subtitle}) {
@@ -44,7 +46,7 @@ void _updateTimeText({required String title, required String subtitle}) {
   );
 }
 
-class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
+class _PrayerSchedulePageState extends ConsumerState<MQPage> {
   final _now = DateTime.now();
   late PrayerSchedule _schedule;
   late String _cityId;
@@ -83,14 +85,22 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
             data.name,
             style: TextStyle(color: colorScheme.onSurface),
           ),
-          error: (_, __) => Text(l10n.failedToLoad,
-              style: TextStyle(color: colorScheme.onSurface)),
-          loading: () => const _ShimmerProgressIndicator(
+          error: (_, __) => const SizedBox.shrink(),
+          loading: () => const ShimmerProgressIndicator(
             width: 140,
             height: 45.0,
             radius: 8.0,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => determinePublicIP()
+                .then((v) => determineAddressFromIP(v))
+                .then((v) => nav.pushNamed('/aladhan',
+                    arguments: AlAdhanArgs(addressIP: v))),
+            icon: const Icon(Icons.adb),
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -218,8 +228,8 @@ class _PrayerSchedulePageState extends ConsumerState<PrayerSchedulePage> {
   }
 }
 
-class PrayerScheduleArgs {
-  const PrayerScheduleArgs(this.data);
+class MQArgs {
+  const MQArgs(this.data);
 
   final String data;
 }
@@ -500,36 +510,6 @@ class _TimeRemaining extends StatelessWidget {
   }
 }
 
-class _ShimmerProgressIndicator extends StatelessWidget {
-  const _ShimmerProgressIndicator({
-    this.width = double.infinity,
-    this.height = kToolbarHeight,
-    this.radius = 16.0,
-  });
-
-  final double width;
-  final double height;
-  final double radius;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Shimmer.fromColors(
-      baseColor: Theme.of(context).splashColor,
-      highlightColor: colorScheme.surface,
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius),
-          color: Theme.of(context).splashColor,
-        ),
-      ),
-    );
-  }
-}
-
 class _LoadingPrayerSchedule extends StatelessWidget {
   const _LoadingPrayerSchedule();
 
@@ -540,10 +520,10 @@ class _LoadingPrayerSchedule extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _ShimmerProgressIndicator(
+          const ShimmerProgressIndicator(
             height: kToolbarHeight * 2,
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 25.0),
           Shimmer.fromColors(
             baseColor: Theme.of(context).splashColor,
             highlightColor: Theme.of(context).colorScheme.surface,
@@ -563,7 +543,7 @@ class _LoadingPrayerSchedule extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16.0),
-          const _ShimmerProgressIndicator(
+          const ShimmerProgressIndicator(
             height: kToolbarHeight * 2,
           ),
         ],

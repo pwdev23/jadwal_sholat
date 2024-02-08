@@ -424,5 +424,165 @@ class _CityProviderElement extends AutoDisposeFutureProviderElement<City>
   @override
   String get id => (origin as CityProvider).id;
 }
+
+String _$timingsHash() => r'65826707e77093d04773edbe026b6ce2b5ccb542';
+
+/// See also [timings].
+@ProviderFor(timings)
+const timingsProvider = TimingsFamily();
+
+/// See also [timings].
+class TimingsFamily extends Family<AsyncValue<AlAdhanTimings>> {
+  /// See also [timings].
+  const TimingsFamily();
+
+  /// See also [timings].
+  TimingsProvider call({
+    required double lat,
+    required double lng,
+    required int method,
+  }) {
+    return TimingsProvider(
+      lat: lat,
+      lng: lng,
+      method: method,
+    );
+  }
+
+  @override
+  TimingsProvider getProviderOverride(
+    covariant TimingsProvider provider,
+  ) {
+    return call(
+      lat: provider.lat,
+      lng: provider.lng,
+      method: provider.method,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'timingsProvider';
+}
+
+/// See also [timings].
+class TimingsProvider extends AutoDisposeFutureProvider<AlAdhanTimings> {
+  /// See also [timings].
+  TimingsProvider({
+    required double lat,
+    required double lng,
+    required int method,
+  }) : this._internal(
+          (ref) => timings(
+            ref as TimingsRef,
+            lat: lat,
+            lng: lng,
+            method: method,
+          ),
+          from: timingsProvider,
+          name: r'timingsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$timingsHash,
+          dependencies: TimingsFamily._dependencies,
+          allTransitiveDependencies: TimingsFamily._allTransitiveDependencies,
+          lat: lat,
+          lng: lng,
+          method: method,
+        );
+
+  TimingsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.lat,
+    required this.lng,
+    required this.method,
+  }) : super.internal();
+
+  final double lat;
+  final double lng;
+  final int method;
+
+  @override
+  Override overrideWith(
+    FutureOr<AlAdhanTimings> Function(TimingsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: TimingsProvider._internal(
+        (ref) => create(ref as TimingsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        lat: lat,
+        lng: lng,
+        method: method,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<AlAdhanTimings> createElement() {
+    return _TimingsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TimingsProvider &&
+        other.lat == lat &&
+        other.lng == lng &&
+        other.method == method;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, lat.hashCode);
+    hash = _SystemHash.combine(hash, lng.hashCode);
+    hash = _SystemHash.combine(hash, method.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin TimingsRef on AutoDisposeFutureProviderRef<AlAdhanTimings> {
+  /// The parameter `lat` of this provider.
+  double get lat;
+
+  /// The parameter `lng` of this provider.
+  double get lng;
+
+  /// The parameter `method` of this provider.
+  int get method;
+}
+
+class _TimingsProviderElement
+    extends AutoDisposeFutureProviderElement<AlAdhanTimings> with TimingsRef {
+  _TimingsProviderElement(super.provider);
+
+  @override
+  double get lat => (origin as TimingsProvider).lat;
+  @override
+  double get lng => (origin as TimingsProvider).lng;
+  @override
+  int get method => (origin as TimingsProvider).method;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

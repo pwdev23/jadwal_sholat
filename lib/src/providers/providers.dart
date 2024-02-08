@@ -1,5 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../aladhan_apis.dart';
+import '../models/aladhan_timings.dart';
 import '../models/models.dart';
 import '../myquran_apis.dart';
 
@@ -26,4 +28,12 @@ Future<City> city(CityRef ref, {required String id}) async {
   final api = MyQuranApis();
   final city = api.getCity(id: id);
   return city;
+}
+
+@riverpod
+Future<AlAdhanTimings> timings(TimingsRef ref,
+    {required double lat, required double lng, required int method}) async {
+  final api = AlAdhanApis();
+  final timings = api.getTimings(lat, lng, method);
+  return timings;
 }
