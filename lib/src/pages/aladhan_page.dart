@@ -5,8 +5,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../common.dart';
 import '../models/address_ip.dart';
+import '../models/aladhan_timings.dart';
 import '../providers/providers.dart' show timingsProvider;
 import '../shared/shimmer_progress_indicator.dart';
+import '../utils.dart' show prayTime;
 
 class AlAdhanPage extends ConsumerStatefulWidget {
   static const routeName = '/aladhan';
@@ -51,7 +53,13 @@ class _AlAdhanPageState extends ConsumerState<AlAdhanPage> {
             children: [
               _TimeBanner(
                 backgroundColor: colorScheme.inverseSurface,
-                child: const Text('data'),
+                child: StreamBuilder(
+                  stream: Stream.periodic(const Duration(seconds: 1)),
+                  builder: (context, snapshot) {
+                    final now = DateTime.now();
+                    return getTimeRemaining(now, data);
+                  },
+                ),
               ),
               const SizedBox(height: 25.0),
               Wrap(
@@ -155,6 +163,62 @@ class _AlAdhanPageState extends ConsumerState<AlAdhanPage> {
       throw Exception('Failed to launch $url');
     }
   }
+
+  RichText getTimeRemaining(DateTime now, AlAdhanTimings timings) {
+    final t = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final leadingStyle = Theme.of(context)
+        .textTheme
+        .headlineLarge!
+        .copyWith(color: colorScheme.onInverseSurface);
+    final tralingStyle = Theme.of(context)
+        .textTheme
+        .titleMedium!
+        .copyWith(color: colorScheme.onInverseSurface);
+    late DateTime compare;
+    late String trailing;
+    late String leading;
+
+    if (now.isBefore(prayTime(context, now, timings.imsak))) {
+      compare = prayTime(context, now, timings.imsak);
+      trailing = '${t.to} ${t.imsak}';
+    } else if (now.isBefore(prayTime(context, now, timings.fajr))) {
+      compare = prayTime(context, now, timings.fajr);
+      trailing = '${t.to} ${t.fajr}';
+    } else if (now.isBefore(prayTime(context, now, timings.sunrise))) {
+      compare = prayTime(context, now, timings.sunrise);
+      trailing = '${t.to} ${t.sunrise}';
+    } else if (now.isBefore(prayTime(context, now, timings.dhuhr))) {
+      compare = prayTime(context, now, timings.dhuhr);
+      trailing = '${t.to} ${t.dhuhr}';
+    } else if (now.isBefore(prayTime(context, now, timings.asr))) {
+      compare = prayTime(context, now, timings.asr);
+      trailing = '${t.to} ${t.asr}';
+    } else if (now.isBefore(prayTime(context, now, timings.maghrib))) {
+      compare = prayTime(context, now, timings.maghrib);
+      trailing = '${t.to} ${t.maghrib}';
+    } else if (now.isBefore(prayTime(context, now, timings.isha))) {
+      compare = prayTime(context, now, timings.isha);
+      trailing = '${t.to} ${t.isha}';
+    } else {
+      final tomorrow = now.add(const Duration(days: 1));
+      compare = prayTime(context, tomorrow, timings.imsak);
+      trailing = '${t.to} ${t.imsak}';
+    }
+
+    final split = '${compare.difference(now)}'.split('.');
+    leading = split[0];
+
+    return RichText(
+      text: TextSpan(
+        text: '$leading ',
+        style: leadingStyle,
+        children: [
+          TextSpan(text: trailing, style: tralingStyle),
+        ],
+      ),
+    );
+  }
 }
 
 class AlAdhanArgs {
@@ -175,6 +239,7 @@ class _TimeBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       height: kToolbarHeight * 2,
       decoration: BoxDecoration(
         color: backgroundColor,

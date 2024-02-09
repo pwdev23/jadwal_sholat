@@ -62,5 +62,9 @@
     "to": "to",
     "@to": {
         "description": "A text for about part 2"
+    },
+    "suggestAladhan": "Go to Al-Adhan page",
+    "@suggestAladhan": {
+        "description": "A text to direct users to go to Al-Adhan page"
     }
 }

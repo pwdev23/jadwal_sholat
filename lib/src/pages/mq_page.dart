@@ -11,6 +11,7 @@ import '../models/prayer_schedule.dart';
 import '../myquran_apis.dart' show kBaseUrl;
 import '../providers/providers.dart';
 import '../shared/shimmer_progress_indicator.dart';
+import '../shared/tiny_circular_progress_indicator.dart';
 import '../utils.dart';
 import '../common.dart';
 import 'aladhan_page.dart' show AlAdhanArgs;
@@ -59,6 +60,7 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
   late bool _maghrib;
   late bool _isha;
   bool _prayerScheduleFetched = false;
+  bool _loading = false;
 
   @override
   void initState() {
@@ -92,15 +94,6 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
             radius: 8.0,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () => determinePublicIP()
-                .then((v) => determineAddressFromIP(v))
-                .then((v) => nav.pushNamed('/aladhan',
-                    arguments: AlAdhanArgs(addressIP: v))),
-            icon: const Icon(Icons.adb),
-          ),
-        ],
       ),
       body: ListView(
         children: [
@@ -162,7 +155,24 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
                 onIsha: (_) {},
               );
             },
-            error: (_, __) => Text(l10n.failedToLoad),
+            error: (_, __) => Column(
+              children: [
+                Text(l10n.failedToLoad),
+                FilledButton(
+                  onPressed: () {
+                    setState(() => _loading = true);
+                    determinePublicIP()
+                        .then((v) => determineAddressFromIP(v))
+                        .then((v) => nav.pushReplacementNamed('/aladhan',
+                            arguments: AlAdhanArgs(addressIP: v)));
+                  },
+                  child: _loading
+                      ? TinyCircularProgressIndicator(
+                          color: colorScheme.onPrimary)
+                      : Text(l10n.suggestAladhan),
+                ),
+              ],
+            ),
             loading: () => const _LoadingPrayerSchedule(),
           ),
           const SizedBox(height: kToolbarHeight * 2),
