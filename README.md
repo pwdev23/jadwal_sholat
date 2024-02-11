@@ -4,9 +4,11 @@
 
 The most minimalist Islamic Prayer Times app for Indonesia region.
 
-<img src="https://i.ibb.co/bz9P689/IMG-20240211-225708.png" width="30%">
-<img src="https://i.ibb.co/DYffM7g/IMG-20240211-225832.png" width="30%">
-<img src="https://i.ibb.co/gvcvDFG/IMG-20240211-225912.png" width="30%">
+<div align="center">
+    <img src="https://i.ibb.co/bz9P689/IMG-20240211-225708.png" width="30%" height="auto">
+    <img src="https://i.ibb.co/DYffM7g/IMG-20240211-225832.png" width="30%" height="auto">
+    <img src="https://i.ibb.co/gvcvDFG/IMG-20240211-225912.png" width="30%" height="auto">
+</div>
 
 ## About
 
