@@ -2,13 +2,33 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:home_widget/home_widget.dart';
 
 import '../common.dart';
+import '../constants.dart';
 import '../models/address_ip.dart';
 import '../models/aladhan_timings.dart';
 import '../providers/providers.dart' show timingsProvider;
 import '../shared/shimmer_progress_indicator.dart';
 import '../utils.dart' show prayTime;
+
+void _updateTexts({
+  required BuildContext context,
+  required AlAdhanTimings d,
+}) {
+  final t = AppLocalizations.of(context)!;
+  HomeWidget.saveWidgetData<String>('txtImsak', '${t.imsak} ${d.imsak}');
+  HomeWidget.saveWidgetData<String>('txtFajr', '${t.fajr} ${d.fajr}');
+  HomeWidget.saveWidgetData<String>('txtSunrise', '${t.sunrise} ${d.sunrise}');
+  HomeWidget.saveWidgetData<String>('txtDhuhr', '${t.dhuhr} ${d.dhuhr}');
+  HomeWidget.saveWidgetData<String>('txtAsr', '${t.asr} ${d.asr}');
+  HomeWidget.saveWidgetData<String>('txtMaghrib', '${t.maghrib} ${d.maghrib}');
+  HomeWidget.saveWidgetData<String>('txtIsha', '${t.isha} ${d.isha}');
+  HomeWidget.updateWidget(
+    // iOSName: iOSWidgetName,
+    androidName: kTimingsWidget,
+  );
+}
 
 class AlAdhanPage extends ConsumerStatefulWidget {
   static const routeName = '/aladhan';
@@ -25,6 +45,7 @@ class _AlAdhanPageState extends ConsumerState<AlAdhanPage> {
   static const String url = 'https://aladhan.com/prayer-times-api';
   static const String providerName = 'aladhan.com';
   final int m = 5;
+  bool _homeWidgetTextsUpdated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +69,11 @@ class _AlAdhanPageState extends ConsumerState<AlAdhanPage> {
       ),
       body: timings.when(
         data: (data) {
+          if (!_homeWidgetTextsUpdated) {
+            _updateTexts(context: context, d: data);
+            setState(() => _homeWidgetTextsUpdated = true);
+          }
+
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             children: [

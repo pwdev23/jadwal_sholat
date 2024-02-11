@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../constants.dart';
 import '../models/prayer_schedule.dart';
 import '../myquran_apis.dart' show kBaseUrl;
 import '../providers/providers.dart';
@@ -17,12 +18,23 @@ import '../common.dart';
 import 'aladhan_page.dart' show AlAdhanArgs;
 import 'search_page.dart' show SearchArgs;
 
-// iOS config
-// const String appGroupId = '<YOUR APP GROUP>';
-// const String iOSWidgetName = 'NewsWidgets';
-
-// Android config
-const String androidWidgetName = 'TimeWidget';
+void _updateTexts({
+  required BuildContext context,
+  required PrayerSchedule d,
+}) {
+  final t = AppLocalizations.of(context)!;
+  HomeWidget.saveWidgetData<String>('txtImsak', '${t.imsak} ${d.imsak}');
+  HomeWidget.saveWidgetData<String>('txtFajr', '${t.fajr} ${d.fajr}');
+  HomeWidget.saveWidgetData<String>('txtSunrise', '${t.sunrise} ${d.sunrise}');
+  HomeWidget.saveWidgetData<String>('txtDhuhr', '${t.dhuhr} ${d.dhuhr}');
+  HomeWidget.saveWidgetData<String>('txtAsr', '${t.asr} ${d.asr}');
+  HomeWidget.saveWidgetData<String>('txtMaghrib', '${t.maghrib} ${d.maghrib}');
+  HomeWidget.saveWidgetData<String>('txtIsha', '${t.isha} ${d.isha}');
+  HomeWidget.updateWidget(
+    // iOSName: iOSWidgetName,
+    androidName: kTimingsWidget,
+  );
+}
 
 class MQPage extends ConsumerStatefulWidget {
   static const routeName = '/mq';
@@ -36,14 +48,6 @@ class MQPage extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<MQPage> createState() => _PrayerSchedulePageState();
-}
-
-void _updateTimeText({required String data}) {
-  HomeWidget.saveWidgetData<String>('data', data);
-  HomeWidget.updateWidget(
-    // iOSName: iOSWidgetName,
-    androidName: androidWidgetName,
-  );
 }
 
 class _PrayerSchedulePageState extends ConsumerState<MQPage> {
@@ -60,6 +64,7 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
   late bool _isha;
   bool _prayerScheduleFetched = false;
   bool _loading = false;
+  bool _homeWidgetTextsUpdated = false;
 
   @override
   void initState() {
@@ -93,11 +98,6 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
             radius: 8.0,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () => _updateTimeText(data: '1,2,3,4,5,6'),
-              icon: const Icon(Icons.adb))
-        ],
       ),
       body: ListView(
         children: [
@@ -123,11 +123,16 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
           const SizedBox(height: 16.0),
           schedule.when(
             data: (data) {
-              if (_prayerScheduleFetched == false) {
+              if (!_prayerScheduleFetched) {
                 setState(() {
                   _schedule = data;
                   _prayerScheduleFetched = true;
                 });
+              }
+
+              if (!_homeWidgetTextsUpdated) {
+                _updateTexts(context: context, d: data);
+                setState(() => _homeWidgetTextsUpdated = true);
               }
 
               return _PrayerScheduleColumn(
