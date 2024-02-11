@@ -7,7 +7,6 @@ void main() {
     imsak: "00:00",
     fajr: "00:00",
     sunrise: "00:00",
-    dhuha: "00:00",
     dhuhr: "00:00",
     asr: "00:00",
     maghrib: "00:00",

@@ -25,7 +25,6 @@ mixin _$PrayerSchedule {
   String get fajr => throw _privateConstructorUsedError;
   @JsonKey(name: 'terbit')
   String get sunrise => throw _privateConstructorUsedError;
-  String get dhuha => throw _privateConstructorUsedError;
   @JsonKey(name: 'dzuhur')
   String get dhuhr => throw _privateConstructorUsedError;
   @JsonKey(name: 'ashar')
@@ -50,7 +49,6 @@ abstract class $PrayerScheduleCopyWith<$Res> {
       {String imsak,
       @JsonKey(name: 'subuh') String fajr,
       @JsonKey(name: 'terbit') String sunrise,
-      String dhuha,
       @JsonKey(name: 'dzuhur') String dhuhr,
       @JsonKey(name: 'ashar') String asr,
       String maghrib,
@@ -73,7 +71,6 @@ class _$PrayerScheduleCopyWithImpl<$Res, $Val extends PrayerSchedule>
     Object? imsak = null,
     Object? fajr = null,
     Object? sunrise = null,
-    Object? dhuha = null,
     Object? dhuhr = null,
     Object? asr = null,
     Object? maghrib = null,
@@ -91,10 +88,6 @@ class _$PrayerScheduleCopyWithImpl<$Res, $Val extends PrayerSchedule>
       sunrise: null == sunrise
           ? _value.sunrise
           : sunrise // ignore: cast_nullable_to_non_nullable
-              as String,
-      dhuha: null == dhuha
-          ? _value.dhuha
-          : dhuha // ignore: cast_nullable_to_non_nullable
               as String,
       dhuhr: null == dhuhr
           ? _value.dhuhr
@@ -128,7 +121,6 @@ abstract class _$$PrayerScheduleImplCopyWith<$Res>
       {String imsak,
       @JsonKey(name: 'subuh') String fajr,
       @JsonKey(name: 'terbit') String sunrise,
-      String dhuha,
       @JsonKey(name: 'dzuhur') String dhuhr,
       @JsonKey(name: 'ashar') String asr,
       String maghrib,
@@ -149,7 +141,6 @@ class __$$PrayerScheduleImplCopyWithImpl<$Res>
     Object? imsak = null,
     Object? fajr = null,
     Object? sunrise = null,
-    Object? dhuha = null,
     Object? dhuhr = null,
     Object? asr = null,
     Object? maghrib = null,
@@ -167,10 +158,6 @@ class __$$PrayerScheduleImplCopyWithImpl<$Res>
       sunrise: null == sunrise
           ? _value.sunrise
           : sunrise // ignore: cast_nullable_to_non_nullable
-              as String,
-      dhuha: null == dhuha
-          ? _value.dhuha
-          : dhuha // ignore: cast_nullable_to_non_nullable
               as String,
       dhuhr: null == dhuhr
           ? _value.dhuhr
@@ -199,7 +186,6 @@ class _$PrayerScheduleImpl implements _PrayerSchedule {
       {required this.imsak,
       @JsonKey(name: 'subuh') required this.fajr,
       @JsonKey(name: 'terbit') required this.sunrise,
-      required this.dhuha,
       @JsonKey(name: 'dzuhur') required this.dhuhr,
       @JsonKey(name: 'ashar') required this.asr,
       required this.maghrib,
@@ -217,8 +203,6 @@ class _$PrayerScheduleImpl implements _PrayerSchedule {
   @JsonKey(name: 'terbit')
   final String sunrise;
   @override
-  final String dhuha;
-  @override
   @JsonKey(name: 'dzuhur')
   final String dhuhr;
   @override
@@ -232,7 +216,7 @@ class _$PrayerScheduleImpl implements _PrayerSchedule {
 
   @override
   String toString() {
-    return 'PrayerSchedule(imsak: $imsak, fajr: $fajr, sunrise: $sunrise, dhuha: $dhuha, dhuhr: $dhuhr, asr: $asr, maghrib: $maghrib, isha: $isha)';
+    return 'PrayerSchedule(imsak: $imsak, fajr: $fajr, sunrise: $sunrise, dhuhr: $dhuhr, asr: $asr, maghrib: $maghrib, isha: $isha)';
   }
 
   @override
@@ -243,7 +227,6 @@ class _$PrayerScheduleImpl implements _PrayerSchedule {
             (identical(other.imsak, imsak) || other.imsak == imsak) &&
             (identical(other.fajr, fajr) || other.fajr == fajr) &&
             (identical(other.sunrise, sunrise) || other.sunrise == sunrise) &&
-            (identical(other.dhuha, dhuha) || other.dhuha == dhuha) &&
             (identical(other.dhuhr, dhuhr) || other.dhuhr == dhuhr) &&
             (identical(other.asr, asr) || other.asr == asr) &&
             (identical(other.maghrib, maghrib) || other.maghrib == maghrib) &&
@@ -252,8 +235,8 @@ class _$PrayerScheduleImpl implements _PrayerSchedule {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, imsak, fajr, sunrise, dhuha, dhuhr, asr, maghrib, isha);
+  int get hashCode =>
+      Object.hash(runtimeType, imsak, fajr, sunrise, dhuhr, asr, maghrib, isha);
 
   @JsonKey(ignore: true)
   @override
@@ -275,7 +258,6 @@ abstract class _PrayerSchedule implements PrayerSchedule {
           {required final String imsak,
           @JsonKey(name: 'subuh') required final String fajr,
           @JsonKey(name: 'terbit') required final String sunrise,
-          required final String dhuha,
           @JsonKey(name: 'dzuhur') required final String dhuhr,
           @JsonKey(name: 'ashar') required final String asr,
           required final String maghrib,
@@ -293,8 +275,6 @@ abstract class _PrayerSchedule implements PrayerSchedule {
   @override
   @JsonKey(name: 'terbit')
   String get sunrise;
-  @override
-  String get dhuha;
   @override
   @JsonKey(name: 'dzuhur')
   String get dhuhr;

@@ -9,7 +9,6 @@ class PrayerSchedule with _$PrayerSchedule {
     required String imsak,
     @JsonKey(name: 'subuh') required String fajr,
     @JsonKey(name: 'terbit') required String sunrise,
-    required String dhuha,
     @JsonKey(name: 'dzuhur') required String dhuhr,
     @JsonKey(name: 'ashar') required String asr,
     required String maghrib,

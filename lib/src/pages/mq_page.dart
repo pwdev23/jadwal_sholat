@@ -38,9 +38,8 @@ class MQPage extends ConsumerStatefulWidget {
   ConsumerState<MQPage> createState() => _PrayerSchedulePageState();
 }
 
-void _updateTimeText({required String title, required String subtitle}) {
-  HomeWidget.saveWidgetData<String>('title', title);
-  HomeWidget.saveWidgetData<String>('subtitle', subtitle);
+void _updateTimeText({required String data}) {
+  HomeWidget.saveWidgetData<String>('data', data);
   HomeWidget.updateWidget(
     // iOSName: iOSWidgetName,
     androidName: androidWidgetName,
@@ -94,6 +93,11 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
             radius: 8.0,
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: () => _updateTimeText(data: '1,2,3,4,5,6'),
+              icon: const Icon(Icons.adb))
+        ],
       ),
       body: ListView(
         children: [
@@ -144,7 +148,6 @@ class _PrayerSchedulePageState extends ConsumerState<MQPage> {
                 sunrise: _sunrise,
                 onSunrise: (_) {},
                 dhuha: _dhuha,
-                onDhuha: (_) {},
                 dhuhr: _dhuhr,
                 onDhuhr: (_) {},
                 asr: _asr,
@@ -259,7 +262,6 @@ class _PrayerScheduleColumn extends StatelessWidget {
     required this.onImsak,
     required this.onFajr,
     required this.onSunrise,
-    required this.onDhuha,
     required this.onDhuhr,
     required this.onAsr,
     required this.onMaghrib,
@@ -281,7 +283,6 @@ class _PrayerScheduleColumn extends StatelessWidget {
   final Function(bool) onImsak;
   final Function(bool) onFajr;
   final Function(bool) onSunrise;
-  final Function(bool) onDhuha;
   final Function(bool) onDhuhr;
   final Function(bool) onAsr;
   final Function(bool) onMaghrib;
@@ -344,15 +345,6 @@ class _PrayerScheduleColumn extends StatelessWidget {
                 ),
                 selected: sunrise,
                 onSelected: (v) => {onSunrise(v)},
-              ),
-              ChoiceChip.elevated(
-                selectedColor: colorScheme.secondaryContainer,
-                label: Text(
-                  '${l10n.dhuha} ${prayerSchedule.dhuha}',
-                  style: titleMedium,
-                ),
-                selected: dhuha,
-                onSelected: (v) => {onDhuha(v)},
               ),
               ChoiceChip.elevated(
                 selectedColor: colorScheme.secondaryContainer,
@@ -473,9 +465,6 @@ class _TimeRemaining extends StatelessWidget {
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.sunrise))) {
       compare = prayTime(context, now, prayerSchedule.sunrise);
       trailing = '${t.to} ${t.sunrise}';
-    } else if (now.isBefore(prayTime(context, now, prayerSchedule.dhuha))) {
-      compare = prayTime(context, now, prayerSchedule.dhuha);
-      trailing = '${t.to} ${t.dhuha}';
     } else if (now.isBefore(prayTime(context, now, prayerSchedule.dhuhr))) {
       compare = prayTime(context, now, prayerSchedule.dhuhr);
       trailing = '${t.to} ${t.dhuhr}';
@@ -565,11 +554,6 @@ class _LoadingPrayerSchedule extends StatelessWidget {
 const kScheduleShimmer = [
   {
     "width": 130.0,
-    "height": 45.0,
-    "radius": 8.0,
-  },
-  {
-    "width": 140.0,
     "height": 45.0,
     "radius": 8.0,
   },
