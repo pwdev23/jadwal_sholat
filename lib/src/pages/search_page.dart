@@ -47,7 +47,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   margin: horizontalPadding,
                   padding: const EdgeInsets.only(left: 16.0, right: 50.0),
                   decoration: BoxDecoration(
-                    color: colorScheme.surfaceVariant,
+                    color: colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: TextFormField(
@@ -158,7 +158,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     style: TextStyle(color: colorScheme.onPrimaryContainer),
                   ),
                   subtitle: Text(data[index].id),
-                  tileColor: colorScheme.surfaceVariant,
+                  tileColor: colorScheme.surfaceContainerHighest,
                 );
               },
               separatorBuilder: (_, __) => Divider(
